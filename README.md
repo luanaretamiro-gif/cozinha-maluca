@@ -753,48 +753,6 @@ kbd {
 }
 
 
-/* =========================================================
-   RATO
-========================================================= */
-
-#ratMenu {
-    display: none;
-
-    position: fixed;
-
-    z-index: 400;
-
-    left: 50%;
-    top: 50%;
-
-    transform:
-        translate(-50%, -50%);
-
-    width: min(560px, 92vw);
-
-    padding: 25px;
-
-    background: #172238;
-
-    border: 5px solid #e3a33b;
-
-    text-align: center;
-}
-
-#ratMenu h2 {
-    color: #ffd83d;
-}
-
-.ratOption {
-    margin: 8px 0;
-
-    padding: 12px;
-
-    background: #101827;
-
-    border: 2px solid #405473;
-}
-
 
 /* =========================================================
    CHUVA
@@ -1200,101 +1158,18 @@ kbd {
 
         <div id="ingredientsList">
 
-            <div class="ingredient" data-key="1">
-                <span class="key">1</span>
-                Pão
-                <span class="stock" id="stock-pao">
-                    10 unidades
-                </span>
-            </div>
-
-            <div class="ingredient" data-key="2">
-                <span class="key">2</span>
-                Carne
-                <span class="stock" id="stock-carne">
-                    10 unidades
-                </span>
-            </div>
-
-            <div class="ingredient" data-key="3">
-                <span class="key">3</span>
-                Queijo
-                <span class="stock" id="stock-queijo">
-                    10 unidades
-                </span>
-            </div>
-
-            <div class="ingredient" data-key="4">
-                <span class="key">4</span>
-                Tomate
-                <span class="stock" id="stock-tomate">
-                    10 unidades
-                </span>
-            </div>
-
-            <div class="ingredient" data-key="5">
-                <span class="key">5</span>
-                Alface
-                <span class="stock" id="stock-alface">
-                    10 unidades
-                </span>
-            </div>
-
-            <div class="ingredient" data-key="6">
-                <span class="key">6</span>
-                Molho
-                <span class="stock" id="stock-molho">
-                    10 unidades
-                </span>
-            </div>
-
-            <div class="ingredient" data-key="7">
-                <span class="key">7</span>
-                Cebola
-                <span class="stock" id="stock-cebola">
-                    10 unidades
-                </span>
-            </div>
-
-            <div class="ingredient locked" data-key="8">
-                <span class="key">8</span>
-                Ketchup
-                <span class="stock" id="stock-ketchup">
-                    BLOQUEADO
-                </span>
-            </div>
-
-            <div class="ingredient locked" data-key="9">
-                <span class="key">9</span>
-                Mostarda
-                <span class="stock" id="stock-mostarda">
-                    BLOQUEADO
-                </span>
-            </div>
-
-            <div class="ingredient locked" data-key="0">
-                <span class="key">0</span>
-                Molho Verde
-                <span class="stock" id="stock-verde">
-                    BLOQUEADO
-                </span>
-            </div>
-
-            <div class="ingredient locked" data-key="-">
-                <span class="key">−</span>
-                Bacon
-                <span class="stock" id="stock-bacon">
-                    BLOQUEADO
-                </span>
-            </div>
-
-            <div class="ingredient locked" data-key="+">
-                <span class="key">+</span>
-                Ovo
-                <span class="stock" id="stock-ovo">
-                    BLOQUEADO
-                </span>
-            </div>
+            <div class="ingredient" data-key="1"><span class="key">1</span>Pão<span class="stock" id="stock-pao">10 unidades</span></div>
+            <div class="ingredient" data-key="2"><span class="key">2</span>Carne<span class="stock" id="stock-carne">10 unidades</span></div>
+            <div class="ingredient" data-key="3"><span class="key">3</span>Queijo<span class="stock" id="stock-queijo">10 unidades</span></div>
+            <div class="ingredient" data-key="4"><span class="key">4</span>Tomate<span class="stock" id="stock-tomate">10 unidades</span></div>
+            <div class="ingredient" data-key="5"><span class="key">5</span>Alface<span class="stock" id="stock-alface">10 unidades</span></div>
+            <div class="ingredient" data-key="6"><span class="key">6</span>Molho<span class="stock" id="stock-molho">10 unidades</span></div>
+            <div class="ingredient" data-key="7"><span class="key">7</span>Cebola<span class="stock" id="stock-cebola">10 unidades</span></div>
+            <div class="ingredient locked" data-key="8"><span class="key">8</span>Cheddar<span class="stock" id="stock-cheddar">BLOQUEADO</span></div>
+            <div class="ingredient locked" data-key="9"><span class="key">9</span>Frango<span class="stock" id="stock-frango">BLOQUEADO</span></div>
+            <div class="ingredient locked" data-key="0"><span class="key">0</span>Catupiry<span class="stock" id="stock-catupiry">BLOQUEADO</span></div>
+            <div class="ingredient locked" data-key="-"><span class="key">−</span>Bacon<span class="stock" id="stock-bacon">BLOQUEADO</span></div>
+            <div class="ingredient locked" data-key="+"><span class="key">+</span>Molho verde<span class="stock" id="stock-verde">BLOQUEADO</span></div>
 
         </div>
 
@@ -1373,23 +1248,23 @@ kbd {
 
             <br><br>
 
-            ⭐ 1800 — Ketchup
+            ⭐ 1800 — Cheddar
 
             <br>
 
-            ⭐ 2350 — Mostarda
+            ⭐ 2300 — Frango
 
             <br>
 
-            ⭐ 2670 — Molho Verde
+            ⭐ 2800 — Catupiry
 
             <br>
 
-            ⭐ 2900 — Bacon
+            ⭐ 3450 — Bacon
 
             <br>
 
-            ⭐ 3450 — Ovo
+            ⭐ 4000 — Molho verde
 
             <br><br>
 
@@ -1424,7 +1299,7 @@ kbd {
 
             <div class="control">
                 <kbd>− / +</kbd>
-                Bacon / Ovo
+                Bacon / Molho verde
             </div>
 
             <div class="control">
@@ -1432,10 +1307,6 @@ kbd {
                 Remover ingrediente
             </div>
 
-            <div class="control">
-                <kbd>Q</kbd>
-                Rato
-            </div>
 
             <div class="control">
                 <kbd>A / ←</kbd>
@@ -1454,42 +1325,6 @@ kbd {
             COMEÇAR — ENTER para ouvir.
         </p>
 
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     RATO
-===================================================== -->
-
-<div id="ratMenu">
-
-    <h2>
-        🐀 RATO NA COZINHA!
-    </h2>
-
-    <p>
-        O que você vai fazer?
-    </p>
-
-    <div class="ratOption">
-        <strong>1 — ESPANTAR</strong>
-        <br>
-        O rato derruba um ingrediente.
-    </div>
-
-    <div class="ratOption">
-        <strong>2 — IGNORAR</strong>
-        <br>
-        O rato come um ingrediente.
-    </div>
-
-    <div class="ratOption">
-        <strong>3 — CHAMAR O GERENTE</strong>
-        <br>
-        O gerente resolve o problema,
-        mas custa 50 pontos.
     </div>
 
 </div>
@@ -1567,13 +1402,13 @@ const START_TIME = 180;
 
 const ORDER_POINTS = 150;
 
-const BONUS_TIME = 7;
+const BONUS_TIME = 15;
 
 const INITIAL_STOCK = 10;
 
 const RAIN_REWARD = 10;
 
-const WIN_SCORE = 4000;
+const WIN_SCORE = 5000;
 
 
 /* =========================================================
@@ -1616,9 +1451,6 @@ const messageBoard =
 const chef =
     document.getElementById("chef");
 
-const ratMenu =
-    document.getElementById("ratMenu");
-
 const rainMode =
     document.getElementById("rainMode");
 
@@ -1643,8 +1475,6 @@ let gameStarted = false;
 let gameOverState = false;
 
 let victoryState = false;
-
-let ratMode = false;
 
 let rainActive = false;
 
@@ -1680,28 +1510,17 @@ let specialClientIndex = 0;
 const makeInitialInventory = () => ({
 
     pao: 10,
-
     carne: 10,
-
     queijo: 10,
-
     tomate: 10,
-
     alface: 10,
-
     molho: 10,
-
     cebola: 10,
-
-    ketchup: 0,
-
-    mostarda: 0,
-
-    verde: 0,
-
+    cheddar: 0,
+    frango: 0,
+    catupiry: 0,
     bacon: 0,
-
-    ovo: 0
+    verde: 0
 
 });
 
@@ -1716,89 +1535,18 @@ let inventory =
 
 const ingredients = {
 
-    "1": {
-        id: "pao",
-        name: "Pão",
-        css: "pixel-pao",
-        unlock: 0
-    },
-
-    "2": {
-        id: "carne",
-        name: "Carne",
-        css: "pixel-carne",
-        unlock: 0
-    },
-
-    "3": {
-        id: "queijo",
-        name: "Queijo",
-        css: "pixel-queijo",
-        unlock: 0
-    },
-
-    "4": {
-        id: "tomate",
-        name: "Tomate",
-        css: "pixel-tomate",
-        unlock: 0
-    },
-
-    "5": {
-        id: "alface",
-        name: "Alface",
-        css: "pixel-alface",
-        unlock: 0
-    },
-
-    "6": {
-        id: "molho",
-        name: "Molho",
-        css: "pixel-molho",
-        unlock: 0
-    },
-
-    "7": {
-        id: "cebola",
-        name: "Cebola",
-        css: "pixel-cebola",
-        unlock: 0
-    },
-
-    "8": {
-        id: "ketchup",
-        name: "Ketchup",
-        css: "pixel-ketchup",
-        unlock: 1800
-    },
-
-    "9": {
-        id: "mostarda",
-        name: "Mostarda",
-        css: "pixel-mostarda",
-        unlock: 2350
-    },
-
-    "0": {
-        id: "verde",
-        name: "Molho verde",
-        css: "pixel-verde",
-        unlock: 2670
-    },
-
-    "-": {
-        id: "bacon",
-        name: "Bacon",
-        css: "pixel-bacon",
-        unlock: 2900
-    },
-
-    "+": {
-        id: "ovo",
-        name: "Ovo",
-        css: "pixel-ovo",
-        unlock: 3450
-    }
+    "1": { id: "pao", name: "Pão", css: "pixel-pao", unlock: 0 },
+    "2": { id: "carne", name: "Carne", css: "pixel-carne", unlock: 0 },
+    "3": { id: "queijo", name: "Queijo", css: "pixel-queijo", unlock: 0 },
+    "4": { id: "tomate", name: "Tomate", css: "pixel-tomate", unlock: 0 },
+    "5": { id: "alface", name: "Alface", css: "pixel-alface", unlock: 0 },
+    "6": { id: "molho", name: "Molho", css: "pixel-molho", unlock: 0 },
+    "7": { id: "cebola", name: "Cebola", css: "pixel-cebola", unlock: 0 },
+    "8": { id: "cheddar", name: "Cheddar", css: "pixel-cheddar", unlock: 1800 },
+    "9": { id: "frango", name: "Frango", css: "pixel-frango", unlock: 2300 },
+    "0": { id: "catupiry", name: "Catupiry", css: "pixel-catupiry", unlock: 2800 },
+    "-": { id: "bacon", name: "Bacon", css: "pixel-bacon", unlock: 3450 },
+    "+": { id: "verde", name: "Molho verde", css: "pixel-verde", unlock: 4000 }
 
 };
 
@@ -1861,8 +1609,8 @@ const normalOrders = [
         prato: "Duplo queijo",
         ingredients: {
             pao: 1,
-            carne: 2,
-            queijo: 2,
+            carne: 1,
+            queijo: 1,
             tomate: 1
         }
     },
@@ -1873,8 +1621,8 @@ const normalOrders = [
         ingredients: {
             pao: 1,
             carne: 1,
-            alface: 2,
-            tomate: 2,
+            alface: 1,
+            tomate: 1,
             cebola: 1
         }
     },
@@ -1884,8 +1632,8 @@ const normalOrders = [
         prato: "Hambúrguer triplo",
         ingredients: {
             pao: 1,
-            carne: 3,
-            queijo: 2,
+            carne: 1,
+            queijo: 1,
             molho: 1
         }
     },
@@ -1895,11 +1643,11 @@ const normalOrders = [
         prato: "X-tudo",
         ingredients: {
             pao: 1,
-            carne: 2,
-            queijo: 2,
-            tomate: 2,
-            alface: 2,
-            cebola: 2,
+            carne: 1,
+            queijo: 1,
+            tomate: 1,
+            alface: 1,
+            cebola: 1,
             molho: 1
         }
     },
@@ -1911,7 +1659,7 @@ const normalOrders = [
             pao: 1,
             carne: 1,
             queijo: 1,
-            tomate: 2,
+            tomate: 1,
             cebola: 1
         }
     },
@@ -1921,9 +1669,9 @@ const normalOrders = [
         prato: "Mega alface",
         ingredients: {
             pao: 1,
-            carne: 2,
+            carne: 1,
             queijo: 1,
-            alface: 3,
+            alface: 1,
             tomate: 1
         }
     },
@@ -1933,9 +1681,9 @@ const normalOrders = [
         prato: "Hambúrguer ceboleiro",
         ingredients: {
             pao: 1,
-            carne: 2,
-            queijo: 2,
-            cebola: 3,
+            carne: 1,
+            queijo: 1,
+            cebola: 1,
             molho: 1
         }
     },
@@ -1945,19 +1693,19 @@ const normalOrders = [
         prato: "Monstro de 5 carnes",
         ingredients: {
             pao: 1,
-            carne: 5,
-            queijo: 3,
-            tomate: 2,
-            alface: 2
+            carne: 1,
+            queijo: 1,
+            tomate: 1,
+            alface: 1
         }
     },
 
     {
         cliente: "Gustavo",
-        prato: "Hambúrguer 10 carnes",
+        prato: "Hambúrguer quíntuplo",
         ingredients: {
             pao: 1,
-            carne: 10
+            carne: 1
         }
     },
 
@@ -1966,10 +1714,10 @@ const normalOrders = [
         prato: "Torre de queijo",
         ingredients: {
             pao: 1,
-            carne: 2,
-            queijo: 5,
-            tomate: 2,
-            alface: 2
+            carne: 1,
+            queijo: 1,
+            tomate: 1,
+            alface: 1
         }
     },
 
@@ -1978,10 +1726,10 @@ const normalOrders = [
         prato: "Saladão gigante",
         ingredients: {
             pao: 1,
-            carne: 2,
-            alface: 5,
-            tomate: 5,
-            cebola: 3
+            carne: 1,
+            alface: 1,
+            tomate: 1,
+            cebola: 1
         }
     }
 
@@ -1993,6 +1741,31 @@ const normalOrders = [
 ========================================================= */
 
 const specialOrders = [
+
+    {
+        cliente: "Neymar",
+        prato: "Hambúrguer driblador",
+        ingredients: {
+            pao: 1,
+            carne: 3,
+            queijo: 3,
+            alface: 2,
+            tomate: 3,
+            molho: 2
+        }
+    },
+
+    {
+        cliente: "Lula",
+        prato: "X-Lula especial",
+        ingredients: {
+            pao: 1,
+            carne: 4,
+            queijo: 4,
+            tomate: 2,
+            cebola: 2
+        }
+    },
 
     {
         cliente: "Felipe Neto",
@@ -2034,19 +1807,6 @@ const specialOrders = [
     },
 
     {
-        cliente: "Neymar",
-        prato: "Hambúrguer driblador",
-        ingredients: {
-            pao: 1,
-            carne: 3,
-            queijo: 3,
-            alface: 2,
-            tomate: 3,
-            molho: 2
-        }
-    },
-
-    {
         cliente: "Pai do Bebê",
         prato: "Hambúrguer do papai",
         ingredients: {
@@ -2072,7 +1832,7 @@ const specialOrders = [
     },
 
     {
-        cliente: "Liz Maiscedo",
+        cliente: "Liz Macedo",
         prato: "Hambúrguer da Liz",
         ingredients: {
             pao: 1,
@@ -2180,13 +1940,19 @@ const specialOrders = [
         prato: "Hambúrguer do Zago",
         ingredients: {
             pao: 1,
-            carne: 6,
+            carne: 5,
             queijo: 4,
             tomate: 2,
             alface: 2,
             cebola: 2
         }
-    }
+    },
+
+    { cliente: "Cristiano Ronaldo", prato: "CR7 Burger", ingredients: { pao: 1, carne: 5, cheddar: 4, tomate: 2, alface: 2 } },
+
+    { cliente: "Bolsonaro", prato: "X-Brasil", ingredients: { pao: 1, carne: 5, queijo: 3, bacon: 2, cebola: 2 } },
+
+    { cliente: "Scooby Doo", prato: "Scooby Burger", ingredients: { pao: 1, carne: 5, cheddar: 3, catupiry: 2, bacon: 2 } }
 
 ];
 
@@ -2240,6 +2006,34 @@ function getPortugueseVoice() {
 
 }
 
+
+const clientVoiceProfiles = {
+    "Virgínia Fonseca": { pitch: 1.18, rate: 1.48 },
+    "Neymar": { pitch: 0.88, rate: 1.62 },
+    "Vini Jr": { pitch: 0.96, rate: 1.70 },
+    "Sosô Careca": { pitch: 0.78, rate: 1.40 },
+    "Cristiano Ronaldo": { pitch: 0.92, rate: 1.50 },
+    "Zeca Pagodinho": { pitch: 0.74, rate: 1.32 },
+    "Bolsonaro": { pitch: 0.82, rate: 1.42 },
+    "Lula": { pitch: 0.76, rate: 1.30 },
+    "Liz Macedo": { pitch: 1.15, rate: 1.52 },
+    "Scooby Doo": { pitch: 0.68, rate: 1.20 }
+};
+
+// Perfis genéricos de voz: o navegador usa síntese para os demais clientes.
+function speakSpecialOrder(order, orderDescription) {
+    if (!synth) return;
+    const profile = clientVoiceProfiles[order.cliente] || { pitch: 1, rate: 1.55 };
+    const voice = getPortugueseVoice();
+    const utter = new SpeechSynthesisUtterance(`Oi! Eu sou ${order.cliente}. Quero ${order.prato}. Ingredientes: ${orderDescription}.`);
+    if (voice) utter.voice = voice;
+    utter.lang = voice ? voice.lang : "pt-BR";
+    utter.rate = profile.rate;
+    utter.pitch = profile.pitch;
+    utter.volume = 1;
+    synth.cancel();
+    synth.speak(utter);
+}
 
 function speak(text) {
 
@@ -2517,8 +2311,7 @@ function startTimer() {
             if (
                 !gameStarted ||
                 gameOverState ||
-                rainActive ||
-                ratMode
+                rainActive
             )
                 return;
 
@@ -2549,28 +2342,20 @@ function startTimer() {
 
 function orderToText(order) {
 
-    return Object.entries(
-        order.ingredients
-    )
-    .map(
-        ([id, amount]) => {
+    const multiplierNames = {
+        2: "dupla",
+        3: "tripla",
+        4: "quádrupla",
+        5: "quíntupla"
+    };
 
-            const item =
-                Object.values(
-                    ingredients
-                )
-                .find(
-                    i =>
-                        i.id === id
-                );
-
-            return amount > 1
-                ? `${amount}x ${item.name}`
-                : item.name;
-
-        }
-    )
-    .join(" + ");
+    return Object.entries(order.ingredients)
+        .map(([id, amount]) => {
+            const item = Object.values(ingredients).find(i => i.id === id);
+            if (item.id === "pao" || amount <= 1) return item.name;
+            return `${item.name} ${multiplierNames[amount] || `${amount}x`}`;
+        })
+        .join(" + ");
 
 }
 
@@ -2582,51 +2367,51 @@ function orderToText(order) {
 function shouldUseSpecialClient() {
 
     return (
-        normalClientsSinceSpecial >= 4
+        normalClientsSinceSpecial >= 4 ||
+        (specialClientIndex > 0 && normalClientsSinceSpecial >= 1)
     );
 
 }
 
 
+function orderUsesUnlockedIngredients(order) {
+    return Object.keys(order.ingredients).every(id => {
+        const item = Object.values(ingredients).find(i => i.id === id);
+        return item && score >= item.unlock;
+    });
+}
+
 function getNextOrder() {
 
-    if (
-        shouldUseSpecialClient()
-    ) {
+    if (shouldUseSpecialClient()) {
 
-        const order =
-            specialOrders[
-                specialClientIndex %
-                specialOrders.length
+        const availableSpecials = specialOrders.filter(orderUsesUnlockedIngredients);
+
+        if (availableSpecials.length) {
+            const order = availableSpecials[
+                specialClientIndex % availableSpecials.length
             ];
 
-        specialClientIndex++;
+            specialClientIndex++;
+            normalClientsSinceSpecial = 0;
 
-        normalClientsSinceSpecial = 0;
-
-        return {
-            ...order,
-            special: true
-        };
-
+            return {
+                ...order,
+                special: true
+            };
+        }
     }
 
-
-    const order =
-        normalOrders[
-            orderIndex %
-            normalOrders.length
-        ];
+    const availableNormals = normalOrders.filter(orderUsesUnlockedIngredients);
+    const order = availableNormals[orderIndex % availableNormals.length];
 
     orderIndex++;
-
     normalClientsSinceSpecial++;
 
     return {
         ...order,
         special: false
     };
-
 }
 
 
@@ -2744,15 +2529,10 @@ function readOrder() {
         currentOrder.special
     ) {
 
-        speakSequence([
-
-            `Pedido especial de ${currentOrder.cliente}.`,
-
-            `${currentOrder.prato}.`,
-
-            `Ingredientes: ${orderDescription}.`
-
-        ]);
+        speakSpecialOrder(
+            currentOrder,
+            orderDescription
+        );
 
     } else {
 
@@ -2775,7 +2555,6 @@ function selectIngredient(key) {
         !gameStarted ||
         gameOverState ||
         rainActive ||
-        ratMode ||
         preparing ||
         !currentOrder
     )
@@ -2881,6 +2660,12 @@ function countIngredients(list) {
 /* =========================================================
    PEDIDO CORRETO
 ========================================================= */
+
+function orderHasValidAmounts(order) {
+    return Object.entries(order.ingredients).every(([id, amount]) =>
+        id === "pao" ? amount === 1 : amount >= 1 && amount <= 5
+    );
+}
 
 function orderIsExact() {
 
@@ -3162,7 +2947,7 @@ function deliverOrder() {
 
 
     message(
-        "🎉 PEDIDO PERFEITO! +150 PONTOS | +7 SEGUNDOS"
+        "🎉 PEDIDO PERFEITO! +150 PONTOS | +15 SEGUNDOS"
     );
 
 
@@ -3649,8 +3434,7 @@ function moveChef(direction) {
     if (
         !gameStarted ||
         gameOverState ||
-        rainActive ||
-        ratMode
+        rainActive
     )
         return;
 
@@ -3721,191 +3505,6 @@ function moveRainChef(direction) {
    RATO
 ========================================================= */
 
-function openRatMenu() {
-
-    if (
-        !gameStarted ||
-        rainActive ||
-        preparing
-    )
-        return;
-
-
-    ratMode = true;
-
-    ratMenu.style.display =
-        "block";
-
-
-    speakSequence([
-
-        "Rato na cozinha.",
-
-        "Pressione 1 para espantar.",
-
-        "Pressione 2 para ignorar.",
-
-        "Pressione 3 para chamar o gerente."
-
-    ]);
-
-}
-
-
-function closeRatMenu() {
-
-    ratMode = false;
-
-    ratMenu.style.display =
-        "none";
-
-}
-
-
-function ratChoice(key) {
-
-    if (!ratMode)
-        return;
-
-
-    const possible =
-        Object.keys(
-            inventory
-        )
-        .filter(
-            id =>
-                inventory[id] > 0
-        );
-
-
-    if (
-        possible.length === 0
-    ) {
-
-        closeRatMenu();
-
-        startIngredientRain();
-
-        return;
-
-    }
-
-
-    const chosen =
-        possible[
-            Math.floor(
-                Math.random() *
-                possible.length
-            )
-        ];
-
-
-    const item =
-        Object
-            .values(
-                ingredients
-            )
-            .find(
-                i =>
-                    i.id === chosen
-            );
-
-
-    if (key === "1") {
-
-        inventory[
-            chosen
-        ]--;
-
-
-        speak(
-            `Você espantou o rato. Ele derrubou ${item.name}.`
-        );
-
-
-        message(
-            `🐀 Rato espantado. ${item.name} foi derrubado.`
-        );
-
-
-        closeRatMenu();
-
-        updateInventoryDisplay();
-
-        checkInventory();
-
-        return;
-
-    }
-
-
-    if (key === "2") {
-
-        inventory[
-            chosen
-        ]--;
-
-
-        speak(
-            `Você ignorou o rato. Ele comeu ${item.name}.`
-        );
-
-
-        message(
-            `🐀 O rato comeu ${item.name}.`
-        );
-
-
-        closeRatMenu();
-
-        updateInventoryDisplay();
-
-        checkInventory();
-
-        return;
-
-    }
-
-
-    if (key === "3") {
-
-        if (score >= 50) {
-
-            score -= 50;
-
-            scoreElement.textContent =
-                score;
-
-
-            speak(
-                "O gerente expulsou o rato. Menos 50 pontos."
-            );
-
-
-            message(
-                "👨‍💼 Gerente chamado. -50 pontos."
-            );
-
-        } else {
-
-            speak(
-                "Você não tem 50 pontos para chamar o gerente."
-            );
-
-
-            message(
-                "❌ Pontos insuficientes."
-            );
-
-        }
-
-
-        closeRatMenu();
-
-    }
-
-}
-
 
 /* =========================================================
    ENTER
@@ -3930,9 +3529,6 @@ function handleEnter() {
 
     }
 
-
-    if (ratMode)
-        return;
 
 
     if (rainActive)
@@ -4049,19 +3645,6 @@ document.addEventListener(
         }
 
 
-        if (ratMode) {
-
-            if (
-                ["1","2","3"]
-                    .includes(key)
-            )
-                ratChoice(key);
-
-            return;
-
-        }
-
-
         if (
             key === "Enter"
         ) {
@@ -4084,16 +3667,6 @@ document.addEventListener(
         }
 
 
-        if (
-            key.toLowerCase() === "q"
-        ) {
-
-            openRatMenu();
-
-            return;
-
-        }
-
 
         if (
             key === "Backspace"
@@ -4109,11 +3682,11 @@ document.addEventListener(
         /*
            NOVOS BOTÕES
 
-           8 = ketchup
-           9 = mostarda
-           0 = molho verde
+           8 = cheddar
+           9 = frango
+           0 = catupiry
            - = bacon
-           + = ovo
+           + = molho verde
 
            No teclado, + pode aparecer como
            "+" ou "=" dependendo da tecla.
@@ -4210,8 +3783,9 @@ function startGame() {
         "Se qualquer ingrediente acabar, começa a chuva e você recebe mais dez de cada.",
 
         "Os ingredientes novos são desbloqueados conforme você ganha pontos.",
+        "Depois de quatro clientes normais, chega um cliente especial.",
 
-        "Aos quatro mil pontos, você se torna o melhor chefe de Ubiratã.",
+        "Aos cinco mil pontos, você se torna o melhor chefe de Ubiratã.",
 
         "Vamos começar!"
 
@@ -4264,7 +3838,7 @@ function winGame() {
         <br><br>
 
         Você alcançou
-        <strong>4000 pontos</strong>!
+        <strong>5000 pontos</strong>!
 
         <br><br>
 
@@ -4400,7 +3974,6 @@ function restartGame() {
 
     rainActive = false;
 
-    ratMode = false;
 
     gameOverState = false;
 
