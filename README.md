@@ -2,113 +2,790 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🍳 Cozinheiro Maluco</title>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
+
+<title>Cozinheiro Maluco</title>
 
 <style>
+/* =========================================================
+   COZINHEIRO MALUCO
+   ESTILO PIXEL ART 2D
+========================================================= */
+
 * {
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    background: #111827;
+    overflow: hidden;
+    background: #101725;
     color: white;
-    font-family: monospace;
+    font-family: "Courier New", monospace;
 }
 
 body {
-    overflow: hidden;
+    image-rendering: pixelated;
 }
+
+/* =========================================================
+   CONTAINER PRINCIPAL
+========================================================= */
 
 #game {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-}
-
-canvas {
     width: 100%;
-    height: 100%;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
-    display: block;
-}
-
-/* Interface acessível */
-#screenReader {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
+    height: 100svh;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
     overflow: hidden;
 }
 
-#message {
-    position: absolute;
-    left: 50%;
-    bottom: 20px;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,.88);
-    border: 3px solid #fff;
-    padding: 12px 20px;
-    max-width: 90%;
-    text-align: center;
-    font-size: 18px;
-    line-height: 1.4;
-    border-radius: 8px;
-    display: none;
+/* =========================================================
+   TOPO
+========================================================= */
+
+#topbar {
+    height: 74px;
+    min-height: 74px;
+    background: #111a2a;
+    border-bottom: 4px solid #263652;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 25px;
+    z-index: 5;
 }
 
-#startOverlay {
+.logo {
+    color: #ffd83d;
+    font-size: clamp(20px, 3vw, 34px);
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow:
+        3px 3px 0 #7c5010;
+}
+
+.stats {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.stat {
+    padding: 7px 12px;
+    border: 2px solid #334463;
+    background: #172238;
+}
+
+#timer {
+    color: #fff;
+}
+
+#timer.danger {
+    color: #ff5252;
+    animation: dangerBlink .5s infinite alternate;
+}
+
+@keyframes dangerBlink {
+    from { opacity: 1; }
+    to { opacity: .45; }
+}
+
+/* =========================================================
+   CENÁRIO PIXEL ART
+========================================================= */
+
+#scene {
+    position: relative;
+    flex: 1;
+    min-height: 280px;
+    overflow: hidden;
+
+    background:
+        linear-gradient(#4bb6dc 0 62%, #79c96b 62% 65%, #81502f 65%);
+}
+
+/* tijolos da parede */
+
+#scene::before {
+    content: "";
     position: absolute;
     inset: 0;
-    background: rgba(10, 15, 25, .96);
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0 42px,
+            rgba(255,255,255,.13) 43px 46px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent 0 72px,
+            rgba(0,0,0,.13) 73px 76px
+        );
+
+    pointer-events: none;
+}
+
+/* chão */
+
+.floor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 34%;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #714526 0 55px,
+            #58361f 55px 59px
+        );
+
+    border-top: 7px solid #b66a37;
+}
+
+/* =========================================================
+   NUVENS
+========================================================= */
+
+.cloud {
+    position: absolute;
+    width: 90px;
+    height: 24px;
+    background: #eaf8ff;
+    opacity: .8;
+}
+
+.cloud::before,
+.cloud::after {
+    content: "";
+    position: absolute;
+    background: #eaf8ff;
+}
+
+.cloud::before {
+    width: 40px;
+    height: 40px;
+    left: 18px;
+    top: -17px;
+}
+
+.cloud::after {
+    width: 35px;
+    height: 35px;
+    right: 10px;
+    top: -12px;
+}
+
+.cloud1 {
+    top: 35px;
+    left: 8%;
+}
+
+.cloud2 {
+    top: 80px;
+    right: 16%;
+    transform: scale(.7);
+}
+
+/* =========================================================
+   COZINHA
+========================================================= */
+
+.station {
+    position: absolute;
+    bottom: 32%;
+    height: 105px;
+    width: 190px;
+
+    background: #242424;
+    border: 10px solid #373737;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    box-shadow:
+        inset 0 -12px #171717,
+        8px 8px rgba(0,0,0,.25);
+}
+
+.station span {
+    position: absolute;
+    bottom: -38px;
+    color: #ffd83d;
+    font-weight: bold;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.oven {
+    left: 7%;
+}
+
+.grill {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.counter {
+    right: 7%;
+}
+
+.ovenDoor {
+    width: 120px;
+    height: 60px;
+    background: #171717;
+    border: 6px solid #111;
+}
+
+.grillTop {
+    width: 125px;
+    height: 15px;
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #111 0 12px,
+            #777 12px 16px
+        );
+    margin-bottom: 25px;
+}
+
+/* =========================================================
+   INGREDIENTES VISUAIS
+========================================================= */
+
+.food {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    bottom: 36%;
+    z-index: 2;
+}
+
+.bread {
+    background: #e9a743;
+    border-radius: 8px 8px 3px 3px;
+}
+
+.cheese {
+    background: #ffd83d;
+    transform: rotate(3deg);
+}
+
+.tomato {
+    background: #e94c4c;
+    border-radius: 50%;
+}
+
+.lettuce {
+    background: #54bd5d;
+    border-radius: 8px;
+}
+
+.onion {
+    background: #d18ae0;
+    border-radius: 50%;
+}
+
+/* =========================================================
+   COZINHEIRO PIXEL
+========================================================= */
+
+#chef {
+    position: absolute;
+
+    left: 50%;
+    bottom: 31%;
+
+    width: 72px;
+    height: 120px;
+
+    transform: translateX(-50%);
+    z-index: 4;
+
+    transition: left .08s linear;
+}
+
+/* cabeça */
+
+.head {
+    position: absolute;
+    width: 55px;
+    height: 55px;
+
+    left: 9px;
+    top: 20px;
+
+    background: #d99769;
+}
+
+.eye {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: #111;
+    top: 22px;
+}
+
+.eye.left {
+    left: 12px;
+}
+
+.eye.right {
+    right: 12px;
+}
+
+.mouth {
+    position: absolute;
+    width: 20px;
+    height: 5px;
+    background: #111;
+    bottom: 12px;
+    left: 17px;
+}
+
+/* chapéu */
+
+.hat {
+    position: absolute;
+    width: 70px;
+    height: 22px;
+
+    left: 1px;
+    top: 5px;
+
+    background: #fff;
+}
+
+.hat::before {
+    content: "";
+    position: absolute;
+
+    width: 48px;
+    height: 25px;
+
+    left: 11px;
+    top: -18px;
+
+    background: #fff;
+}
+
+/* corpo */
+
+.body {
+    position: absolute;
+    width: 72px;
+    height: 62px;
+
+    bottom: 0;
+    background: #f3f3f3;
+}
+
+/* braços */
+
+.arm {
+    position: absolute;
+    width: 17px;
+    height: 48px;
+    background: #d99769;
+    top: 67px;
+}
+
+.arm.left {
+    left: -12px;
+    transform: rotate(18deg);
+}
+
+.arm.right {
+    right: -12px;
+    transform: rotate(-18deg);
+}
+
+/* =========================================================
+   PAINEL INFERIOR
+========================================================= */
+
+#bottom {
+    height: 34%;
+    min-height: 210px;
+
+    background: #111a2a;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    padding: 12px;
+
+    border-top: 5px solid #283852;
+}
+
+.panel {
+    background: #151f32;
+    border: 3px solid #334463;
+    padding: 14px;
+
+    overflow: hidden;
+}
+
+.panel-title {
+    color: #ffd83d;
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#orderText {
+    line-height: 1.45;
+    font-size: 17px;
+}
+
+#ingredientsList {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+}
+
+.ingredient {
+    border: 2px solid #405476;
+    background: #1b2940;
+    padding: 8px;
+
+    min-width: 0;
+
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.ingredient.selected {
+    background: #315c47;
+    border-color: #70e090;
+}
+
+.key {
+    color: #ffd83d;
+    font-size: 18px;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+#status {
+    position: absolute;
+
+    left: 50%;
+    bottom: calc(34% + 14px);
+
+    transform: translateX(-50%);
+
+    width: min(800px, 90%);
+
+    padding: 10px 16px;
+
+    background: rgba(8, 13, 22, .92);
+    border: 3px solid #ffd83d;
+
+    color: white;
+
+    text-align: center;
+
+    font-weight: bold;
+    font-size: 16px;
+
+    z-index: 10;
+
+    pointer-events: none;
+}
+
+/* =========================================================
+   TELA INICIAL
+========================================================= */
+
+#startScreen,
+#gameOver {
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(8,14,24,.82),
+            rgba(8,14,24,.94)
+        );
+
+    z-index: 100;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+
+    padding: 20px;
 }
 
-#startBox {
-    width: min(700px, 90%);
-    border: 5px solid #facc15;
-    background: #1f2937;
+.menuBox {
+    width: min(760px, 95vw);
+
+    background: #172238;
+
+    border: 5px solid #50668d;
+
+    box-shadow:
+        10px 10px #080c14;
+
     padding: 30px;
+
     text-align: center;
-    box-shadow: 0 0 0 6px #111827;
 }
 
-#startBox h1 {
-    color: #facc15;
-    font-size: 42px;
-    margin-top: 0;
-}
+.menuTitle {
+    color: #ffd83d;
 
-#startBox p {
-    font-size: 18px;
-    line-height: 1.6;
-}
+    font-size: clamp(30px, 6vw, 56px);
 
-#startButton {
-    background: #facc15;
-    border: 4px solid #78350f;
-    padding: 15px 30px;
-    font-size: 22px;
-    font-family: monospace;
     font-weight: bold;
+
+    text-shadow:
+        4px 4px #7d5212;
+
+    margin-bottom: 20px;
+}
+
+.startButton {
+    display: inline-block;
+
+    padding: 18px 35px;
+
+    background: #d95b38;
+
+    border: 4px solid #ffb14e;
+
+    color: white;
+
+    font-size: 24px;
+    font-weight: bold;
+
     cursor: pointer;
+
+    outline: none;
+
+    box-shadow:
+        0 7px #7f3221;
 }
 
-#startButton:hover {
-    background: #fde68a;
+.startButton:hover,
+.startButton:focus {
+    background: #f06d43;
+    transform: translateY(-2px);
 }
 
-.hidden {
-    display: none !important;
+.controls {
+    margin-top: 25px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(200px, 1fr));
+
+    gap: 8px;
+
+    text-align: left;
+
+    font-size: 15px;
+}
+
+.control {
+    background: #101827;
+    padding: 9px;
+    border: 2px solid #30415f;
+}
+
+kbd {
+    background: #f0f0f0;
+    color: #111;
+    border: 2px solid #999;
+
+    padding: 2px 6px;
+
+    font-weight: bold;
+}
+
+/* =========================================================
+   MENU DO RATO
+========================================================= */
+
+#ratMenu {
+    display: none;
+
+    position: absolute;
+
+    z-index: 80;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: min(520px, 90vw);
+
+    background: #18243a;
+
+    border: 5px solid #e3a33a;
+
+    padding: 25px;
+
+    text-align: center;
+}
+
+#ratMenu h2 {
+    color: #ffd83d;
+}
+
+.ratOption {
+    padding: 12px;
+    margin: 7px 0;
+
+    background: #111a2a;
+
+    border: 2px solid #415473;
+}
+
+/* =========================================================
+   GAME OVER
+========================================================= */
+
+#gameOver {
+    display: none;
+}
+
+.gameOverTitle {
+    color: #ff5a5a;
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.restart {
+    margin-top: 20px;
+}
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 800px) {
+
+    #topbar {
+        padding: 0 10px;
+    }
+
+    .stats {
+        gap: 7px;
+        font-size: 13px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    .station {
+        transform: scale(.7);
+        transform-origin: bottom;
+    }
+
+    .grill {
+        left: 50%;
+    }
+
+    #bottom {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+    }
+
+    .panel {
+        min-height: 150px;
+    }
+
+    #ingredientsList {
+        grid-template-columns:
+            repeat(4, minmax(60px, 1fr));
+    }
+
+    .controls {
+        grid-template-columns: 1fr;
+    }
+
+    #status {
+        bottom: 35%;
+    }
+}
+
+@media (max-height: 700px) {
+
+    #topbar {
+        height: 58px;
+        min-height: 58px;
+    }
+
+    #bottom {
+        height: 38%;
+    }
+
+    #status {
+        bottom: 39%;
+    }
+
+    .station {
+        bottom: 35%;
+    }
+
+    #chef {
+        bottom: 34%;
+    }
+}
+
+/* =========================================================
+   ACESSIBILIDADE
+========================================================= */
+
+.sr-only {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    padding: 0;
+    margin: -1px;
+
+    overflow: hidden;
+
+    clip: rect(0, 0, 0, 0);
+
+    white-space: nowrap;
+
+    border: 0;
+}
+
+button {
+    font-family: inherit;
+}
+
+:focus-visible {
+    outline: 4px solid #65d9ff;
+    outline-offset: 4px;
 }
 </style>
 </head>
@@ -117,276 +794,506 @@ canvas {
 
 <div id="game">
 
-<canvas id="canvas" width="960" height="540"></canvas>
+    <!-- =====================================================
+         TOPO
+    ====================================================== -->
 
-<div id="screenReader" aria-live="assertive"></div>
+    <header id="topbar">
 
-<div id="message"></div>
+        <div class="logo">
+            🍳 COZINHEIRO MALUCO
+        </div>
 
-<div id="startOverlay">
-    <div id="startBox">
-        <h1>🍳 COZINHEIRO MALUCO</h1>
+        <div class="stats">
 
-        <p>
-            Este jogo pode ser jogado inteiramente pelo teclado.
-            <br><br>
-            A introdução será narrada pelo computador.
-            <br>
-            Você não precisa usar o mouse.
-        </p>
+            <div class="stat">
+                ⭐ <span id="score">0</span>
+            </div>
 
-        <button id="startButton">
-            COMEÇAR — ENTER
-        </button>
+            <div class="stat">
+                ⏱️ <span id="timer">03:00</span>
+            </div>
 
-        <p>
-            Depois de começar, pressione <b>Backspace</b>
-            para repetir informações importantes.
-        </p>
+            <div class="stat">
+                📅 Dia <span id="day">1</span>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         CENÁRIO
+    ====================================================== -->
+
+    <main id="scene">
+
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+
+        <div class="station oven">
+            <div class="ovenDoor"></div>
+            <span>FORNO</span>
+        </div>
+
+        <div class="station grill">
+            <div class="grillTop"></div>
+            <span>CHAPA</span>
+        </div>
+
+        <div class="station counter">
+            <span>BALCÃO</span>
+        </div>
+
+        <div class="floor"></div>
+
+        <!-- Ingredientes decorativos -->
+
+        <div class="food bread"
+             style="left:24%;"></div>
+
+        <div class="food tomato"
+             style="left:73%;"></div>
+
+        <div class="food lettuce"
+             style="left:82%;"></div>
+
+        <!-- COZINHEIRO -->
+
+        <div id="chef">
+
+            <div class="hat"></div>
+
+            <div class="head">
+
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+
+                <div class="mouth"></div>
+
+            </div>
+
+            <div class="arm left"></div>
+            <div class="arm right"></div>
+
+            <div class="body"></div>
+
+        </div>
+
+        <div id="status">
+            Aguardando...
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         PAINÉIS
+    ====================================================== -->
+
+    <section id="bottom">
+
+        <div class="panel">
+
+            <div class="panel-title">
+                📋 PEDIDO
+            </div>
+
+            <div id="orderText">
+                Nenhum pedido ainda.
+                Pressione E para ouvir o pedido.
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-title">
+                🧺 INGREDIENTES
+            </div>
+
+            <div id="ingredientsList">
+
+                <div class="ingredient"
+                     data-key="1">
+                    <span class="key">1</span>
+                    Pão
+                </div>
+
+                <div class="ingredient"
+                     data-key="2">
+                    <span class="key">2</span>
+                    Carne
+                </div>
+
+                <div class="ingredient"
+                     data-key="3">
+                    <span class="key">3</span>
+                    Queijo
+                </div>
+
+                <div class="ingredient"
+                     data-key="4">
+                    <span class="key">4</span>
+                    Tomate
+                </div>
+
+                <div class="ingredient"
+                     data-key="5">
+                    <span class="key">5</span>
+                    Alface
+                </div>
+
+                <div class="ingredient"
+                     data-key="6">
+                    <span class="key">6</span>
+                    Molho
+                </div>
+
+                <div class="ingredient"
+                     data-key="7">
+                    <span class="key">7</span>
+                    Cebola
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MENU INICIAL
+    ====================================================== -->
+
+    <div id="startScreen">
+
+        <div class="menuBox">
+
+            <div class="menuTitle">
+                🍳 COZINHEIRO MALUCO
+            </div>
+
+            <p>
+                Uma cozinha pixel art onde você precisa
+                preparar pedidos antes que o tempo acabe!
+            </p>
+
+            <button
+                id="startButton"
+                class="startButton"
+                type="button"
+                aria-label="Começar jogo, pressione Enter">
+
+                COMEÇAR — ENTER
+
+            </button>
+
+            <div class="controls">
+
+                <div class="control">
+                    <kbd>ENTER</kbd>
+                    Começar / preparar / entregar
+                </div>
+
+                <div class="control">
+                    <kbd>E</kbd>
+                    Ouvir pedido
+                </div>
+
+                <div class="control">
+                    <kbd>1–7</kbd>
+                    Ingredientes
+                </div>
+
+                <div class="control">
+                    <kbd>BACKSPACE</kbd>
+                    Remover ingrediente
+                </div>
+
+                <div class="control">
+                    <kbd>Q</kbd>
+                    Rato na cozinha
+                </div>
+
+                <div class="control">
+                    <kbd>R</kbd>
+                    Reabastecer estoque
+                </div>
+
+                <div class="control">
+                    <kbd>W A S D</kbd>
+                    Andar
+                </div>
+
+                <div class="control">
+                    <kbd>SETAS</kbd>
+                    Andar
+                </div>
+
+            </div>
+
+            <p style="margin-top:20px;color:#ffd83d;">
+                Tudo pode ser jogado pelo teclado.
+            </p>
+
+        </div>
+
     </div>
-</div>
+
+
+    <!-- =====================================================
+         MENU RATO
+    ====================================================== -->
+
+    <div id="ratMenu">
+
+        <h2>🐀 RATO NA COZINHA!</h2>
+
+        <p>
+            O rato entrou na despensa e está mexendo
+            nos ingredientes!
+        </p>
+
+        <div class="ratOption">
+            <strong>1 — ESPANTAR</strong><br>
+            O rato foge e derruba um ingrediente.
+        </div>
+
+        <div class="ratOption">
+            <strong>2 — IGNORAR</strong><br>
+            O rato continua na cozinha e come um ingrediente.
+        </div>
+
+        <div class="ratOption">
+            <strong>3 — CHAMAR O GERENTE</strong><br>
+            O gerente resolve o problema, mas custa pontos.
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         GAME OVER
+    ====================================================== -->
+
+    <div id="gameOver">
+
+        <div class="menuBox">
+
+            <div class="gameOverTitle">
+                FALÊNCIA!
+            </div>
+
+            <p id="gameOverText">
+                O tempo acabou.
+            </p>
+
+            <button
+                id="restartButton"
+                class="startButton restart">
+
+                RECOMEÇAR — ENTER
+
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
+
 
 <script>
 
 /* =========================================================
-   COZINHEIRO MALUCO
-   ========================================================= */
+   CONFIGURAÇÕES
+========================================================= */
 
-/* ---------- CANVAS ---------- */
-
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-const W = canvas.width;
-const H = canvas.height;
+const GAME_TIME_START = 180; // 3 minutos
+const BONUS_TIME = 7;
+const ORDER_POINTS = 150;
 
 
-/* ---------- ACESSIBILIDADE ---------- */
+/* =========================================================
+   ELEMENTOS
+========================================================= */
 
-const sr = document.getElementById("screenReader");
-const message = document.getElementById("message");
+const startScreen =
+    document.getElementById("startScreen");
 
-let speechEnabled = true;
-let speaking = false;
+const startButton =
+    document.getElementById("startButton");
 
-function speak(text, interrupt = false) {
+const restartButton =
+    document.getElementById("restartButton");
 
-    if (!speechEnabled || !("speechSynthesis" in window)) {
-        return;
-    }
+const gameOver =
+    document.getElementById("gameOver");
 
-    if (interrupt) {
-        speechSynthesis.cancel();
-    }
+const gameOverText =
+    document.getElementById("gameOverText");
 
-    const utterance = new SpeechSynthesisUtterance(text);
+const ratMenu =
+    document.getElementById("ratMenu");
 
-    utterance.lang = "pt-BR";
+const scoreElement =
+    document.getElementById("score");
 
-    /*
-       Velocidade relativamente rápida para que as
-       confirmações não atrapalhem o jogador.
-    */
-    utterance.rate = 1.25;
-    utterance.pitch = 1;
+const timerElement =
+    document.getElementById("timer");
 
-    speaking = true;
+const dayElement =
+    document.getElementById("day");
 
-    utterance.onend = () => {
-        speaking = false;
-    };
+const orderText =
+    document.getElementById("orderText");
 
-    speechSynthesis.speak(utterance);
+const statusElement =
+    document.getElementById("status");
 
-    sr.textContent = text;
-}
-
-function quickSpeak(text) {
-
-    if (!speechEnabled) return;
-
-    if ("speechSynthesis" in window) {
-        speechSynthesis.cancel();
-
-        const utterance = new SpeechSynthesisUtterance(text);
-
-        utterance.lang = "pt-BR";
-        utterance.rate = 1.5;
-        utterance.pitch = 1;
-
-        speechSynthesis.speak(utterance);
-
-        sr.textContent = text;
-    }
-}
-
-function showMessage(text, duration = 2200) {
-
-    message.innerText = text;
-    message.style.display = "block";
-
-    clearTimeout(showMessage.timer);
-
-    showMessage.timer = setTimeout(() => {
-        message.style.display = "none";
-    }, duration);
-}
+const chef =
+    document.getElementById("chef");
 
 
-/* ---------- ESTADO DO JOGO ---------- */
-
-const STATE = {
-
-    TUTORIAL: "tutorial",
-    PLAYING: "playing",
-    EVENT: "event",
-    GAMEOVER: "gameover"
-
-};
-
-let state = STATE.TUTORIAL;
-
-
-/* ---------- JOGADOR ---------- */
-
-let score = 0;
-let timeLeft = 180;
-let bestScore = Number(localStorage.getItem("cozinheiroBest") || 0);
-
-let lastTime = performance.now();
-
-let currentOrder = null;
-
-let selectedIngredients = [];
-
-let event = null;
-
-let tutorialStep = 0;
+/* =========================================================
+   ESTADO DO JOGO
+========================================================= */
 
 let gameStarted = false;
 
+let gameOverState = false;
 
-/* ---------- ESTOQUE ---------- */
+let score = 0;
 
-const stock = {
+let day = 1;
 
+let timeLeft = GAME_TIME_START;
+
+let timerInterval = null;
+
+let ratMode = false;
+
+let orderVisible = false;
+
+let preparing = false;
+
+let selectedIngredients = [];
+
+let currentOrder = null;
+
+let chefX = 50;
+
+let inventory = {
     pao: 8,
-    carne: 6,
-    queijo: 4,
-    tomate: 7,
-    alface: 5,
-    molho: 4,
-    cebola: 3,
-    cogumelo: 3,
-    ovo: 3,
-    especial: 1
-
+    carne: 8,
+    queijo: 8,
+    tomate: 8,
+    alface: 8,
+    molho: 8,
+    cebola: 8
 };
 
 
-/* ---------- INGREDIENTES ---------- */
+/* =========================================================
+   INGREDIENTES
+========================================================= */
 
 const ingredients = {
 
     "1": {
         id: "pao",
-        name: "pão",
-        icon: "🍞"
+        name: "Pão"
     },
 
     "2": {
         id: "carne",
-        name: "carne",
-        icon: "🥩"
+        name: "Carne"
     },
 
     "3": {
         id: "queijo",
-        name: "queijo",
-        icon: "🧀"
+        name: "Queijo"
     },
 
     "4": {
         id: "tomate",
-        name: "tomate",
-        icon: "🍅"
+        name: "Tomate"
     },
 
     "5": {
         id: "alface",
-        name: "alface",
-        icon: "🥬"
+        name: "Alface"
     },
 
     "6": {
         id: "molho",
-        name: "molho",
-        icon: "🥫"
+        name: "Molho"
     },
 
     "7": {
         id: "cebola",
-        name: "cebola",
-        icon: "🧅"
-    },
-
-    "8": {
-        id: "cogumelo",
-        name: "cogumelo",
-        icon: "🍄"
-    },
-
-    "9": {
-        id: "ovo",
-        name: "ovo",
-        icon: "🥚"
-    },
-
-    "0": {
-        id: "especial",
-        name: "ingrediente especial",
-        icon: "⭐"
+        name: "Cebola"
     }
 
 };
 
 
-/* ---------- PEDIDOS ---------- */
+/* =========================================================
+   PEDIDOS
+========================================================= */
 
 const orders = [
 
     {
-        client: "Maria",
-        dish: "Hambúrguer",
-        ingredients: ["pao", "carne", "queijo", "tomate"],
-        names: ["pão", "carne", "queijo", "tomate"],
-        points: 150
+        cliente: "Maria",
+        prato: "Hambúrguer",
+        ingredients: [
+            "pao",
+            "carne",
+            "queijo",
+            "tomate"
+        ]
     },
 
     {
-        client: "João",
-        dish: "Hambúrguer com alface",
-        ingredients: ["pao", "carne", "queijo", "alface"],
-        names: ["pão", "carne", "queijo", "alface"],
-        points: 170
+        cliente: "João",
+        prato: "Hambúrguer completo",
+        ingredients: [
+            "pao",
+            "carne",
+            "queijo",
+            "alface",
+            "molho"
+        ]
     },
 
     {
-        client: "Ana",
-        dish: "Hambúrguer especial",
-        ingredients: ["pao", "carne", "queijo", "tomate", "molho"],
-        names: ["pão", "carne", "queijo", "tomate", "molho"],
-        points: 200
+        cliente: "Ana",
+        prato: "Hambúrguer especial",
+        ingredients: [
+            "pao",
+            "carne",
+            "queijo",
+            "tomate",
+            "cebola"
+        ]
     },
 
     {
-        client: "Pedro",
-        dish: "Hambúrguer com cebola",
-        ingredients: ["pao", "carne", "queijo", "cebola"],
-        names: ["pão", "carne", "queijo", "cebola"],
-        points: 180
+        cliente: "Pedro",
+        prato: "X-salada",
+        ingredients: [
+            "pao",
+            "carne",
+            "queijo",
+            "alface",
+            "tomate",
+            "molho"
+        ]
     }
 
 ];
@@ -395,663 +1302,663 @@ let orderIndex = 0;
 
 
 /* =========================================================
-   PIXEL ART
-   ========================================================= */
+   VOZ
+========================================================= */
 
-function rect(x, y, w, h, color) {
+const synth =
+    window.speechSynthesis;
 
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);
+let voices = [];
+
+
+function loadVoices() {
+
+    if (!synth) return;
+
+    voices = synth.getVoices();
 
 }
 
-function pixelText(text, x, y, size, color = "#fff") {
 
-    ctx.fillStyle = color;
-    ctx.font = `bold ${size}px monospace`;
-    ctx.fillText(text, x, y);
+loadVoices();
+
+if (synth) {
+
+    synth.onvoiceschanged =
+        loadVoices;
 
 }
 
 
-/* ---------- COZINHA ---------- */
+/* escolhe uma voz em português */
 
-function drawKitchen() {
+function getPortugueseVoice() {
 
-    /* fundo */
+    const ptBR =
+        voices.find(v =>
+            v.lang &&
+            v.lang.toLowerCase()
+                .startsWith("pt-br")
+        );
 
-    rect(0, 0, W, H, "#182235");
+    if (ptBR) return ptBR;
 
-    /* parede */
 
-    rect(0, 70, W, 280, "#8b5e3c");
+    const pt =
+        voices.find(v =>
+            v.lang &&
+            v.lang.toLowerCase()
+                .startsWith("pt")
+        );
 
-    /* azulejos */
+    if (pt) return pt;
 
-    for (let x = 0; x < W; x += 60) {
+    return null;
+}
 
-        for (let y = 70; y < 350; y += 40) {
 
-            ctx.strokeStyle = "#a97850";
-            ctx.lineWidth = 2;
+/* =========================================================
+   FALA RÁPIDA
+========================================================= */
 
-            ctx.strokeRect(x, y, 60, 40);
+function speak(text, options = {}) {
 
-        }
+    if (!synth) return;
 
+    synth.cancel();
+
+    const utter =
+        new SpeechSynthesisUtterance(text);
+
+    const voice =
+        getPortugueseVoice();
+
+    if (voice) {
+        utter.voice = voice;
     }
 
-    /* chão */
+    utter.lang =
+        voice ? voice.lang : "pt-BR";
 
-    rect(0, 350, W, 190, "#57402f");
+    /*
+       Mais rápido para evitar aquela fala
+       extremamente lenta e robótica.
+    */
 
-    for (let x = 0; x < W; x += 80) {
+    utter.rate =
+        options.rate || 1.55;
 
-        for (let y = 350; y < H; y += 40) {
+    utter.pitch =
+        options.pitch || 1.0;
 
-            ctx.strokeStyle = "#463323";
-            ctx.strokeRect(x, y, 80, 40);
+    utter.volume =
+        options.volume || 1.0;
 
-        }
+    synth.speak(utter);
+
+}
+
+
+/* fala várias mensagens curtas */
+
+async function speakSequence(messages) {
+
+    for (const message of messages) {
+
+        await new Promise(resolve => {
+
+            if (!synth) {
+                resolve();
+                return;
+            }
+
+            const utter =
+                new SpeechSynthesisUtterance(message);
+
+            const voice =
+                getPortugueseVoice();
+
+            if (voice) {
+                utter.voice = voice;
+            }
+
+            utter.lang =
+                voice ? voice.lang : "pt-BR";
+
+            utter.rate = 1.55;
+            utter.pitch = 1.0;
+
+            utter.onend = resolve;
+
+            synth.speak(utter);
+
+        });
 
     }
-
-    /* balcão */
-
-    rect(0, 300, W, 70, "#9b6032");
-    rect(0, 300, W, 12, "#d18a4b");
-
-    /* forno */
-
-    rect(80, 130, 190, 150, "#252525");
-    rect(100, 150, 150, 90, "#111");
-
-    rect(115, 165, 120, 60, "#542f20");
-
-    pixelText("FORNO", 125, 260, 20, "#facc15");
-
-    /* chapa */
-
-    rect(370, 150, 220, 90, "#222");
-    rect(385, 165, 190, 50, "#444");
-
-    pixelText("CHAPA", 425, 260, 20, "#facc15");
-
-    /* pia */
-
-    rect(680, 140, 180, 120, "#555");
-
-    rect(700, 160, 140, 70, "#222");
-
-    pixelText("PIA", 750, 250, 20, "#facc15");
-
-    /* armário */
-
-    rect(30, 70, 180, 55, "#754c2d");
-
-    pixelText("DESPENSA", 50, 105, 20, "#fff");
-
-    /* personagem */
-
-    drawChef(480, 250);
-
-}
-
-
-/* ---------- COZINHEIRO ---------- */
-
-function drawChef(x, y) {
-
-    /* corpo */
-
-    rect(x - 35, y, 70, 70, "#f5f5f5");
-
-    /* cabeça */
-
-    rect(x - 30, y - 45, 60, 55, "#d99a6c");
-
-    /* chapéu */
-
-    rect(x - 40, y - 70, 80, 30, "#fff");
-
-    rect(x - 25, y - 90, 50, 25, "#fff");
-
-    /* olhos */
-
-    rect(x - 15, y - 25, 7, 7, "#111");
-    rect(x + 8, y - 25, 7, 7, "#111");
-
-    /* bigode */
-
-    rect(x - 10, y - 8, 20, 6, "#3b2417");
-
-}
-
-
-/* ---------- RATO ---------- */
-
-function drawRat() {
-
-    if (!event || event.type !== "rat") return;
-
-    const x = 720;
-    const y = 310;
-
-    /* corpo */
-
-    rect(x, y, 45, 25, "#777");
-
-    /* cabeça */
-
-    rect(x + 35, y - 5, 25, 25, "#888");
-
-    /* orelha */
-
-    rect(x + 40, y - 15, 12, 12, "#999");
-
-    /* olho */
-
-    rect(x + 52, y, 5, 5, "#ff0000");
-
-    /* cauda */
-
-    ctx.strokeStyle = "#999";
-    ctx.lineWidth = 4;
-
-    ctx.beginPath();
-
-    ctx.moveTo(x, y + 10);
-    ctx.quadraticCurveTo(x - 40, y - 10, x - 55, y + 20);
-
-    ctx.stroke();
 
 }
 
 
 /* =========================================================
-   INTERFACE
-   ========================================================= */
+   HOVER DO BOTÃO COMEÇAR
+========================================================= */
 
-function drawUI() {
+startButton.addEventListener(
+    "mouseenter",
+    () => {
 
-    /* barra superior */
+        if (!gameStarted) {
 
-    rect(0, 0, W, 70, "#111827");
+            speak(
+                "Começar. Pressione Enter.",
+                { rate: 1.65 }
+            );
 
-    pixelText("🍳 COZINHEIRO MALUCO", 25, 42, 28, "#facc15");
+        }
 
-    pixelText(
-        `⭐ ${score}`,
-        600,
-        40,
-        24,
-        "#fff"
-    );
+    }
+);
 
-    pixelText(
-        `⏱️ ${formatTime(timeLeft)}`,
-        780,
-        40,
-        24,
-        timeLeft <= 30 ? "#ef4444" : "#fff"
-    );
 
-    /* pedidos */
+startButton.addEventListener(
+    "focus",
+    () => {
 
-    rect(20, 390, 430, 130, "#111827");
+        if (!gameStarted) {
 
-    pixelText("📋 PEDIDO", 40, 420, 22, "#facc15");
+            speak(
+                "Começar. Pressione Enter.",
+                { rate: 1.65 }
+            );
 
-    if (currentOrder) {
+        }
 
-        pixelText(
-            `${currentOrder.client} — ${currentOrder.dish}`,
-            40,
-            450,
-            19,
-            "#fff"
-        );
+    }
+);
 
-        pixelText(
-            `[E] Ver pedido`,
-            40,
-            485,
-            18,
-            "#93c5fd"
-        );
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setStatus(text) {
+
+    statusElement.textContent =
+        text;
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function updateTimer() {
+
+    const minutes =
+        Math.floor(timeLeft / 60);
+
+    const seconds =
+        timeLeft % 60;
+
+    timerElement.textContent =
+        `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+
+    if (timeLeft <= 20) {
+
+        timerElement.classList.add("danger");
 
     } else {
 
-        pixelText(
-            "Nenhum pedido ativo.",
-            40,
-            450,
-            18
-        );
+        timerElement.classList.remove("danger");
 
     }
-
-    /* ingredientes */
-
-    rect(470, 390, 470, 130, "#111827");
-
-    pixelText("🧺 INGREDIENTES", 490, 420, 22, "#facc15");
-
-    const list = Object.entries(ingredients);
-
-    let x = 490;
-    let y = 455;
-
-    list.forEach(([key, item], index) => {
-
-        pixelText(
-            `[${key}] ${item.name}`,
-            x,
-            y,
-            15,
-            "#fff"
-        );
-
-        x += 145;
-
-        if ((index + 1) % 3 === 0) {
-
-            x = 490;
-            y += 30;
-
-        }
-
-    });
 
 }
 
 
-/* ---------- EVENT UI ---------- */
+function startTimer() {
 
-function drawEventUI() {
+    clearInterval(timerInterval);
 
-    if (!event) return;
+    timerInterval =
+        setInterval(() => {
 
-    rect(250, 110, 460, 170, "rgba(0,0,0,.92)");
+            if (!gameStarted ||
+                gameOverState) {
+                return;
+            }
 
-    ctx.strokeStyle = "#ef4444";
-    ctx.lineWidth = 5;
-    ctx.strokeRect(250, 110, 460, 170);
+            if (ratMode) {
+                return;
+            }
 
-    if (event.type === "rat") {
+            timeLeft--;
 
-        pixelText(
-            "🐀 RATO NA COZINHA!",
-            290,
-            155,
-            27,
-            "#f87171"
-        );
+            updateTimer();
 
-        pixelText(
-            "[1] Espantar",
-            300,
-            195,
-            20
-        );
+            if (timeLeft <= 0) {
 
-        pixelText(
-            "[2] Ignorar",
-            300,
-            225,
-            20
-        );
+                timeLeft = 0;
 
-        pixelText(
-            "[3] Chamar gerente",
-            300,
-            255,
-            20
-        );
+                updateTimer();
 
-    }
+                loseGame();
+
+            }
+
+        }, 1000);
 
 }
 
 
 /* =========================================================
-   PEDIDOS
-   ========================================================= */
+   NOVO PEDIDO
+========================================================= */
 
-function newOrder() {
+function createOrder() {
 
-    currentOrder = orders[
-        orderIndex % orders.length
-    ];
+    currentOrder =
+        orders[orderIndex % orders.length];
 
     orderIndex++;
 
     selectedIngredients = [];
 
-    speak(
-        `Novo pedido. Cliente: ${currentOrder.client}. Pedido: ${currentOrder.dish}. Ingredientes: ${currentOrder.names.join(", ")}. Pressione E para começar o pedido. Pressione Backspace para repetir.`,
-        true
+    orderVisible = false;
+
+    preparing = false;
+
+    updateIngredientsVisual();
+
+    orderText.innerHTML =
+        `
+        <strong>Novo pedido!</strong><br>
+        Cliente: ${currentOrder.cliente}<br>
+        Prato: ${currentOrder.prato}<br>
+        <br>
+        Pressione <strong>E</strong> para ouvir.
+        `;
+
+    setStatus(
+        "🔔 Novo pedido! Pressione E."
     );
 
-    showMessage(
-        `🔔 NOVO PEDIDO — ${currentOrder.client}: ${currentOrder.dish}`
+    speak(
+        `Novo pedido. Cliente ${currentOrder.cliente}. ${currentOrder.prato}. Pressione E para ouvir.`,
+        { rate: 1.5 }
     );
 
 }
 
 
-/* ---------- COMEÇAR PEDIDO ---------- */
+/* =========================================================
+   OUVIR PEDIDO
+========================================================= */
 
-function startOrder() {
+function readOrder() {
 
-    if (!currentOrder) {
-
-        speak("Não existe nenhum pedido agora.");
-
+    if (!gameStarted ||
+        gameOverState ||
+        !currentOrder) {
         return;
-
     }
 
+    orderVisible = true;
+
+    const names =
+        currentOrder.ingredients
+            .map(id =>
+                Object.values(ingredients)
+                    .find(i => i.id === id)
+                    ?.name
+            );
+
+    orderText.innerHTML =
+        `
+        <strong>Cliente: ${currentOrder.cliente}</strong><br>
+        <strong>${currentOrder.prato}</strong><br><br>
+
+        ${names.join(" + ")}
+        `;
+
     speak(
-        `Pedido da ${currentOrder.client} iniciado. Você precisa de ${currentOrder.names.join(", ")}. Escolha os ingredientes usando as teclas numéricas.`,
-        true
+        `Pedido de ${currentOrder.cliente}. ${currentOrder.prato}. Ingredientes: ${names.join(", ")}.`
     );
 
 }
 
 
-/* ---------- INGREDIENTE ---------- */
+/* =========================================================
+   INGREDIENTE
+========================================================= */
 
-function chooseIngredient(key) {
+function selectIngredient(key) {
 
-    if (!currentOrder) {
-
-        quickSpeak("Não existe pedido ativo.");
-
+    if (!gameStarted ||
+        gameOverState ||
+        ratMode ||
+        preparing ||
+        !currentOrder) {
         return;
-
     }
 
-    const item = ingredients[key];
+    const ingredient =
+        ingredients[key];
 
-    if (!item) return;
+    if (!ingredient) return;
+
 
     /* estoque */
 
-    if (stock[item.id] <= 0) {
+    if (inventory[ingredient.id] <= 0) {
 
         speak(
-            `${item.name} está esgotado.`
+            `${ingredient.name} acabou.`
+        );
+
+        setStatus(
+            `❌ ${ingredient.name} acabou.`
+        );
+
+        return;
+    }
+
+
+    inventory[ingredient.id]--;
+
+    selectedIngredients.push(
+        ingredient.id
+    );
+
+
+    updateIngredientsVisual();
+
+
+    speak(
+        `${ingredient.name} selecionado.`,
+        { rate: 1.7 }
+    );
+
+
+    setStatus(
+        `${ingredient.name} selecionado.`
+    );
+
+
+    /*
+       Verifica se colocou algo
+       que não pertence ao pedido.
+    */
+
+    if (
+        !currentOrder.ingredients
+            .includes(ingredient.id)
+    ) {
+
+        speak(
+            `${ingredient.name}. Atenção: o pedido não contém ${ingredient.name.toLowerCase()}. Pressione Backspace para remover.`
+        );
+
+        return;
+    }
+
+
+    /*
+       Verifica se já possui todos
+       os ingredientes necessários.
+    */
+
+    const allCorrect =
+        currentOrder.ingredients.every(
+            id =>
+                selectedIngredients
+                    .includes(id)
+        );
+
+
+    if (allCorrect) {
+
+        const names =
+            currentOrder.ingredients
+                .map(id =>
+                    Object.values(ingredients)
+                        .find(i => i.id === id)
+                        ?.name
+                );
+
+        speakSequence([
+
+            "Todos os ingredientes necessários foram selecionados.",
+
+            names.join(", ") + ".",
+
+            "Pressione Enter para preparar o hambúrguer."
+
+        ]);
+
+        setStatus(
+            "Todos os ingredientes corretos! ENTER para preparar."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BACKSPACE
+========================================================= */
+
+function removeLastIngredient() {
+
+    if (!gameStarted ||
+        gameOverState ||
+        ratMode ||
+        preparing) {
+        return;
+    }
+
+    if (selectedIngredients.length === 0) {
+
+        speak(
+            "Nenhum ingrediente para remover."
         );
 
         return;
 
     }
 
-    selectedIngredients.push(item.id);
-
-    stock[item.id]--;
-
-    /* fala rápida */
-
-    quickSpeak(item.name);
-
-    /* verifica se o ingrediente é necessário */
-
-    if (!currentOrder.ingredients.includes(item.id)) {
-
-        setTimeout(() => {
-
-            speak(
-                `Atenção. O pedido não contém ${item.name}. Pressione Backspace para remover o último ingrediente.`,
-                true
-            );
-
-        }, 250);
-
-        return;
-
-    }
-
-    checkOrder();
-
-}
-
-
-/* ---------- BACKSPACE ---------- */
-
-function removeLastIngredient() {
-
-    if (selectedIngredients.length === 0) {
-
-        repeatCurrentInformation();
-
-        return;
-
-    }
 
     const removed =
         selectedIngredients.pop();
 
-    stock[removed]++;
 
-    const item = Object.values(ingredients)
-        .find(i => i.id === removed);
+    inventory[removed]++;
+
+
+    const name =
+        Object.values(ingredients)
+            .find(i => i.id === removed)
+            ?.name;
+
+
+    updateIngredientsVisual();
 
     speak(
-        `${item.name} removido.`
+        `${name} removido.`,
+        { rate: 1.7 }
     );
 
-    checkOrder();
-
-}
-
-
-/* ---------- REPETIR ---------- */
-
-function repeatCurrentInformation() {
-
-    if (state === STATE.TUTORIAL) {
-
-        tutorial();
-
-        return;
-
-    }
-
-    if (currentOrder) {
-
-        speak(
-            `Pedido de ${currentOrder.client}. ${currentOrder.dish}. Ingredientes: ${currentOrder.names.join(", ")}.`,
-            true
-        );
-
-        return;
-
-    }
-
-    if (event) {
-
-        speak(
-            "Opções: tecla 1 para espantar. Tecla 2 para ignorar. Tecla 3 para chamar o gerente.",
-            true
-        );
-
-        return;
-
-    }
-
-    speak(
-        `Tempo restante: ${formatTime(timeLeft)}. Pontuação: ${score}.`
+    setStatus(
+        `${name} removido.`
     );
 
 }
 
 
-/* ---------- VERIFICA PEDIDO ---------- */
+/* =========================================================
+   VISUAL INGREDIENTES
+========================================================= */
 
-function checkOrder() {
+function updateIngredientsVisual() {
 
-    if (!currentOrder) return;
+    document
+        .querySelectorAll(".ingredient")
+        .forEach(el => {
 
-    const required =
-        currentOrder.ingredients;
+            el.classList.remove("selected");
 
-    /*
-       Verifica se todos os ingredientes necessários
-       estão presentes.
-    */
+            const key =
+                el.dataset.key;
 
-    const complete =
-        required.every(
-            ingredient =>
-                selectedIngredients.includes(ingredient)
-        );
+            const ingredient =
+                ingredients[key];
 
-    if (!complete) return;
+            if (
+                selectedIngredients
+                    .includes(ingredient.id)
+            ) {
 
-    /* se houver ingrediente errado */
+                el.classList.add("selected");
 
-    const wrong =
-        selectedIngredients.some(
-            ingredient =>
-                !required.includes(ingredient)
-        );
+            }
 
-    if (wrong) return;
-
-    speak(
-        "Pedido completo. Pressione Enter para preparar.",
-        true
-    );
+        });
 
 }
 
 
-/* ---------- PREPARAR ---------- */
+/* =========================================================
+   PREPARAR
+========================================================= */
 
 function prepareOrder() {
 
-    if (!currentOrder) {
-
-        speak("Não existe pedido ativo.");
-
+    if (!currentOrder ||
+        preparing) {
         return;
-
     }
 
-    const required =
-        currentOrder.ingredients;
 
-    const complete =
-        required.every(
-            ingredient =>
-                selectedIngredients.includes(ingredient)
+    const exact =
+        selectedIngredients.length ===
+        currentOrder.ingredients.length &&
+
+        currentOrder.ingredients.every(
+            id =>
+                selectedIngredients
+                    .includes(id)
         );
 
-    const wrong =
-        selectedIngredients.some(
-            ingredient =>
-                !required.includes(ingredient)
-        );
 
-    if (!complete || wrong) {
+    if (!exact) {
 
         speak(
-            "O pedido ainda não está correto."
+            "O pedido está errado. Verifique os ingredientes."
+        );
+
+        setStatus(
+            "❌ Pedido incorreto."
         );
 
         return;
 
     }
+
+
+    preparing = true;
+
+    setStatus(
+        "🍳 Preparando..."
+    );
 
     speak(
         "Preparando.",
-        true
+        { rate: 1.65 }
     );
 
-    showMessage("🍳 PREPARANDO...");
+
+    /*
+       pequena animação da chapa
+    */
+
+    const grill =
+        document.querySelector(".grill");
+
+    grill.style.background =
+        "#5b2d22";
 
     setTimeout(() => {
 
+        grill.style.background =
+            "#242424";
+
         speak(
-            `${currentOrder.dish} pronto. Pressione Enter para entregar.`,
-            true
+            "Hambúrguer pronto.",
+            { rate: 1.65 }
         );
 
-        showMessage("🍔 PEDIDO PRONTO!");
+        setStatus(
+            `🍔 Hambúrguer pronto! ENTER para entregar a ${currentOrder.cliente}.`
+        );
 
-        state = STATE.PLAYING;
-
-    }, 1500);
-
-    currentOrder.prepared = true;
+    }, 1100);
 
 }
 
 
-/* ---------- ENTREGAR ---------- */
+/* =========================================================
+   ENTREGAR
+========================================================= */
 
 function deliverOrder() {
 
-    if (!currentOrder) {
-
-        speak("Não existe pedido para entregar.");
-
+    if (!currentOrder ||
+        !preparing) {
         return;
-
     }
 
-    if (!currentOrder.prepared) {
 
-        prepareOrder();
+    score += ORDER_POINTS;
 
-        return;
+    timeLeft += BONUS_TIME;
 
-    }
 
-    const basePoints =
-        currentOrder.points;
+    scoreElement.textContent =
+        score;
 
-    const speedBonus =
-        Math.min(
-            50,
-            Math.max(
-                0,
-                Math.floor(timeLeft / 10)
-            )
-        );
+    updateTimer();
 
-    const perfectBonus =
-        25;
 
-    const total =
-        basePoints +
-        speedBonus +
-        perfectBonus;
+    const cliente =
+        currentOrder.cliente;
 
-    score += total;
 
-    timeLeft += 7;
+    speakSequence([
 
-    speak(
-        `Pedido entregue para ${currentOrder.client}. Você ganhou ${basePoints} pontos. Bônus de velocidade: ${speedBonus} pontos. Bônus de pedido perfeito: ${perfectBonus} pontos. Total: ${total} pontos. Tempo aumentado em sete segundos.`,
-        true
+        `Pedido entregue para ${cliente}.`,
+
+        "Você ganhou 150 pontos.",
+
+        "Mais 7 segundos adicionados."
+
+    ]);
+
+
+    setStatus(
+        `🎉 Pedido perfeito! +150 pontos | +7 segundos`
     );
 
-    showMessage(
-        `🎉 +${total} PONTOS    ⏱️ +7 SEGUNDOS`
-    );
 
-    currentOrder = null;
-
-    selectedIngredients = [];
-
-    /* próximo pedido */
+    /*
+       Pequena pausa antes do próximo pedido
+    */
 
     setTimeout(() => {
 
-        newOrder();
+        createOrder();
 
     }, 1800);
 
@@ -1059,257 +1966,683 @@ function deliverOrder() {
 
 
 /* =========================================================
-   EVENTOS
-   ========================================================= */
+   ENTER
+========================================================= */
 
-function triggerRat() {
+function handleEnter() {
 
-    if (state !== STATE.PLAYING) return;
+    if (!gameStarted) {
 
-    if (event) return;
+        startGame();
 
-    event = {
-        type: "rat"
-    };
+        return;
 
-    state = STATE.EVENT;
-
-    speak(
-        "Atenção. Um rato entrou na cozinha. Pressione Q para ver as opções.",
-        true
-    );
-
-    showMessage("🐀 RATO NA COZINHA! [Q] VER OPÇÕES");
-
-}
+    }
 
 
-/* ---------- MENU DO RATO ---------- */
+    if (gameOverState) {
 
-function openRatOptions() {
+        restartGame();
 
-    if (!event) return;
+        return;
 
-    speak(
-        "Opções. Tecla 1: espantar o rato. Tecla 2: ignorar o rato. Tecla 3: chamar o gerente.",
-        true
-    );
-
-}
+    }
 
 
-/* ---------- ESPANTAR ---------- */
+    if (ratMode) {
 
-function scareRat() {
+        return;
 
-    event = null;
-    state = STATE.PLAYING;
-
-    timeLeft = Math.max(
-        0,
-        timeLeft - 5
-    );
-
-    speak(
-        "Você espantou o rato. Você perdeu cinco segundos.",
-        true
-    );
-
-}
+    }
 
 
-/* ---------- IGNORAR ---------- */
+    if (!preparing) {
 
-function ignoreRat() {
+        /*
+           Se os ingredientes estão corretos,
+           prepara.
+        */
 
-    state = STATE.PLAYING;
+        if (currentOrder) {
 
-    speak(
-        "Você ignorou o rato. Continue trabalhando.",
-        true
-    );
+            const exact =
+                selectedIngredients.length ===
+                currentOrder.ingredients.length &&
 
-    /*
-       Depois de alguns segundos o rato come
-       um ingrediente.
-    */
+                currentOrder.ingredients.every(
+                    id =>
+                        selectedIngredients
+                            .includes(id)
+                );
 
-    setTimeout(() => {
 
-        ratEatIngredient();
+            if (exact) {
 
-    }, 3500);
+                prepareOrder();
 
-    event = null;
+                return;
+
+            }
+
+        }
+
+    } else {
+
+        deliverOrder();
+
+    }
 
 }
 
 
-/* ---------- RATO COME ---------- */
+/* =========================================================
+   RATO
+========================================================= */
 
-function ratEatIngredient() {
+function openRatMenu() {
 
-    const possible =
-        ["queijo", "carne", "pao", "tomate", "alface"];
+    if (!gameStarted ||
+        gameOverState ||
+        preparing) {
+        return;
+    }
 
-    const available =
-        possible.filter(
-            id => stock[id] > 0
-        );
+    ratMode = true;
 
-    if (available.length === 0) {
+    ratMenu.style.display =
+        "block";
+
+    speakSequence([
+
+        "Atenção! Rato na cozinha.",
+
+        "Pressione 1 para espantar.",
+
+        "Pressione 2 para ignorar.",
+
+        "Pressione 3 para chamar o gerente."
+
+    ]);
+
+}
+
+
+function closeRatMenu() {
+
+    ratMode = false;
+
+    ratMenu.style.display =
+        "none";
+
+}
+
+
+/* =========================================================
+   ESCOLHAS DO RATO
+========================================================= */
+
+function handleRatChoice(key) {
+
+    if (!ratMode) return;
+
+
+    /* 1 ESPANTAR */
+
+    if (key === "1") {
+
+        /*
+           O rato derruba um ingrediente.
+        */
+
+        const possible =
+            Object.keys(inventory)
+                .filter(id =>
+                    inventory[id] > 0
+                );
+
+        const chosen =
+            possible[
+                Math.floor(
+                    Math.random() *
+                    possible.length
+                )
+            ];
+
+
+        if (chosen) {
+
+            inventory[chosen]--;
+
+            const name =
+                Object.values(ingredients)
+                    .find(i => i.id === chosen)
+                    ?.name;
+
+            speak(
+                `Você espantou o rato. Ele derrubou ${name}.`
+            );
+
+            setStatus(
+                `🐀 Rato espantado. ${name} foi derrubado.`
+            );
+
+        }
+
+        closeRatMenu();
+
+        return;
+
+    }
+
+
+    /* 2 IGNORAR */
+
+    if (key === "2") {
+
+        const possible =
+            Object.keys(inventory)
+                .filter(id =>
+                    inventory[id] > 0
+                );
+
+        const chosen =
+            possible[
+                Math.floor(
+                    Math.random() *
+                    possible.length
+                )
+            ];
+
+
+        if (chosen) {
+
+            inventory[chosen]--;
+
+            const name =
+                Object.values(ingredients)
+                    .find(i => i.id === chosen)
+                    ?.name;
+
+            speak(
+                `Você ignorou o rato. Ele comeu ${name}.`
+            );
+
+            setStatus(
+                `🐀 O rato comeu ${name}.`
+            );
+
+        }
+
+        closeRatMenu();
+
+        return;
+
+    }
+
+
+    /* 3 GERENTE */
+
+    if (key === "3") {
+
+        const cost = 50;
+
+        if (score >= cost) {
+
+            score -= cost;
+
+            scoreElement.textContent =
+                score;
+
+            speak(
+                "O gerente expulsou o rato. Custou 50 pontos."
+            );
+
+            setStatus(
+                "👨‍💼 Gerente chamado. -50 pontos."
+            );
+
+        } else {
+
+            speak(
+                "Você não tem 50 pontos. O gerente não pode ser chamado."
+            );
+
+            setStatus(
+                "❌ Pontos insuficientes."
+            );
+
+        }
+
+        closeRatMenu();
+
+    }
+
+}
+
+
+/* =========================================================
+   REABASTECIMENTO
+========================================================= */
+
+function restock() {
+
+    if (!gameStarted ||
+        gameOverState ||
+        ratMode) {
+        return;
+    }
+
+    const cost = 25;
+
+    if (score < cost) {
 
         speak(
-            "O rato não encontrou ingredientes para comer."
+            "Você precisa de 25 pontos para reabastecer."
+        );
+
+        setStatus(
+            "❌ Faltam 25 pontos."
         );
 
         return;
 
     }
 
-    const id =
-        available[
-            Math.floor(
-                Math.random() * available.length
-            )
-        ];
 
-    stock[id]--;
+    score -= cost;
 
-    const item =
-        Object.values(ingredients)
-        .find(i => i.id === id);
+
+    for (const id in inventory) {
+
+        inventory[id] = 8;
+
+    }
+
+
+    scoreElement.textContent =
+        score;
+
 
     speak(
-        `O rato comeu um ${item.name}.`,
-        true
+        "Despensa reabastecida. Custou 25 pontos."
     );
 
-}
-
-
-/* ---------- GERENTE ---------- */
-
-function callManager() {
-
-    event = null;
-
-    state = STATE.PLAYING;
-
-    timeLeft = Math.max(
-        0,
-        timeLeft - 10
-    );
-
-    speak(
-        "Você chamou o gerente. O gerente removeu o rato. Você perdeu dez segundos e gastou dez reais.",
-        true
+    setStatus(
+        "🧺 Estoque reabastecido."
     );
 
 }
 
 
 /* =========================================================
-   TUTORIAL
-   ========================================================= */
+   MOVIMENTO
+========================================================= */
 
-const tutorialLines = [
+function moveChef(direction) {
 
-    "Bem-vindo ao Cozinheiro Maluco.",
+    if (!gameStarted ||
+        gameOverState ||
+        ratMode) {
+        return;
+    }
 
-    "Este jogo pode ser jogado completamente pelo teclado.",
 
-    "Vou ensinar os botões dos ingredientes.",
+    if (direction === "left") {
 
-    "Tecla 1: pão.",
+        chefX -= 2;
 
-    "Tecla 2: carne.",
+    }
 
-    "Tecla 3: queijo.",
+    if (direction === "right") {
 
-    "Tecla 4: tomate.",
+        chefX += 2;
 
-    "Tecla 5: alface.",
+    }
 
-    "Tecla 6: molho.",
 
-    "Tecla 7: cebola.",
+    chefX =
+        Math.max(
+            5,
+            Math.min(
+                95,
+                chefX
+            )
+        );
 
-    "Tecla 8: cogumelo.",
 
-    "Tecla 9: ovo.",
+    chef.style.left =
+        chefX + "%";
 
-    "Tecla zero: ingrediente especial.",
+}
 
-    "A tecla E serve para abrir ou iniciar um pedido.",
 
-    "A tecla Q abre as opções quando acontece um evento.",
+/* =========================================================
+   TECLADO
+========================================================= */
 
-    "A tecla Enter confirma ações e entrega pedidos.",
+document.addEventListener(
+    "keydown",
+    function(event) {
 
-    "A tecla Backspace repete informações ou remove o último ingrediente.",
+        const key =
+            event.key;
 
-    "Você começa com três minutos.",
 
-    "Cada pedido correto aumenta seu tempo em sete segundos.",
+        /*
+           Impede o navegador de
+           fazer coisas estranhas com
+           espaço, setas e backspace.
+        */
 
-    "Se o tempo chegar a zero, seu restaurante irá à falência.",
+        if (
+            [
+                "ArrowUp",
+                "ArrowDown",
+                "ArrowLeft",
+                "ArrowRight",
+                "Backspace",
+                " "
+            ].includes(key)
+        ) {
 
-    "Se quiser ouvir estas instruções novamente, pressione Backspace.",
+            event.preventDefault();
 
-    "Quando estiver pronto, pressione Enter para começar."
+        }
 
-];
 
-function tutorial() {
+        /* GAME OVER */
 
-    state = STATE.TUTORIAL;
+        if (gameOverState) {
 
-    const text =
-        tutorialLines.join(" ");
+            if (
+                key === "Enter" ||
+                key === " "
+            ) {
 
-    speak(
-        text,
-        true
-    );
+                restartGame();
+
+            }
+
+            return;
+
+        }
+
+
+        /* MENU INICIAL */
+
+        if (!gameStarted) {
+
+            if (key === "Enter") {
+
+                startGame();
+
+            }
+
+            return;
+
+        }
+
+
+        /* MENU DO RATO */
+
+        if (ratMode) {
+
+            if (
+                ["1", "2", "3"]
+                    .includes(key)
+            ) {
+
+                handleRatChoice(key);
+
+            }
+
+            return;
+
+        }
+
+
+        /* ENTER */
+
+        if (key === "Enter") {
+
+            handleEnter();
+
+            return;
+
+        }
+
+
+        /* E */
+
+        if (
+            key.toLowerCase() === "e"
+        ) {
+
+            readOrder();
+
+            return;
+
+        }
+
+
+        /* Q */
+
+        if (
+            key.toLowerCase() === "q"
+        ) {
+
+            openRatMenu();
+
+            return;
+
+        }
+
+
+        /* R */
+
+        if (
+            key.toLowerCase() === "r"
+        ) {
+
+            restock();
+
+            return;
+
+        }
+
+
+        /* BACKSPACE */
+
+        if (key === "Backspace") {
+
+            removeLastIngredient();
+
+            return;
+
+        }
+
+
+        /* INGREDIENTES */
+
+        if (
+            ["1","2","3","4","5","6","7"]
+                .includes(key)
+        ) {
+
+            selectIngredient(key);
+
+            return;
+
+        }
+
+
+        /* MOVIMENTO */
+
+        if (
+            key === "ArrowLeft" ||
+            key.toLowerCase() === "a"
+        ) {
+
+            moveChef("left");
+
+        }
+
+
+        if (
+            key === "ArrowRight" ||
+            key.toLowerCase() === "d"
+        ) {
+
+            moveChef("right");
+
+        }
+
+
+        if (
+            key === "ArrowUp" ||
+            key.toLowerCase() === "w"
+        ) {
+
+            setStatus(
+                "⬆️ Você não pode atravessar o teto!"
+            );
+
+        }
+
+
+        if (
+            key === "ArrowDown" ||
+            key.toLowerCase() === "s"
+        ) {
+
+            setStatus(
+                "⬇️ Você está na área da cozinha."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+function startGame() {
+
+    if (gameStarted) return;
+
+
+    gameStarted = true;
+
+    gameOverState = false;
+
+
+    startScreen.style.display =
+        "none";
+
+
+    /*
+       A música começa aqui porque
+       o Enter é uma interação do usuário.
+    */
+
+    startItalianMusic();
+
+
+    /*
+       Primeiro pedido
+    */
+
+    createOrder();
+
+
+    /*
+       Fala inicial
+    */
+
+    speakSequence([
+
+        "Bem-vindo ao Cozinheiro Maluco!",
+
+        "Você tem três minutos.",
+
+        "Pão é 1. Carne é 2. Queijo é 3.",
+
+        "Tomate é 4. Alface é 5. Molho é 6. Cebola é 7.",
+
+        "Memorizou bem?",
+
+        "Se quiser repetir, pressione Backspace."
+
+    ]);
+
+
+    startTimer();
 
 }
 
 
 /* =========================================================
    GAME OVER
-   ========================================================= */
+========================================================= */
 
-function gameOver() {
+function loseGame() {
 
-    state = STATE.GAMEOVER;
+    clearInterval(timerInterval);
 
-    if (score > bestScore) {
+    gameOverState = true;
 
-        bestScore = score;
+    gameStarted = false;
 
-        localStorage.setItem(
-            "cozinheiroBest",
-            bestScore
-        );
+    stopItalianMusic();
 
-    }
 
-    speak(
-        `Tempo esgotado. Seu restaurante faliu. Sua pontuação final foi ${score} pontos. Seu recorde é ${bestScore} pontos. Pressione Enter para recomeçar ou Escape para voltar ao menu.`,
-        true
-    );
+    gameOverText.innerHTML =
+        `
+        O tempo acabou.<br><br>
+
+        Pontuação final:
+        <strong>${score}</strong> pontos.
+        `;
+
+
+    gameOver.style.display =
+        "flex";
+
+
+    speakSequence([
+
+        "Falência!",
+
+        "O tempo acabou.",
+
+        `Sua pontuação final foi ${score} pontos.`,
+
+        "Pressione Enter para recomeçar."
+
+    ]);
 
 }
 
 
-/* ---------- RECOMEÇAR ---------- */
+/* =========================================================
+   RECOMEÇAR
+========================================================= */
 
 function restartGame() {
 
+    gameOver.style.display =
+        "none";
+
+
     score = 0;
 
-    timeLeft = 180;
+    day = 1;
+
+    timeLeft =
+        GAME_TIME_START;
 
     orderIndex = 0;
 
@@ -1317,325 +2650,316 @@ function restartGame() {
 
     selectedIngredients = [];
 
-    event = null;
+    preparing = false;
 
-    /*
-       restaura estoque
-    */
+    ratMode = false;
 
-    Object.assign(
-        stock,
-        {
-            pao: 8,
-            carne: 6,
-            queijo: 4,
-            tomate: 7,
-            alface: 5,
-            molho: 4,
-            cebola: 3,
-            cogumelo: 3,
-            ovo: 3,
-            especial: 1
-        }
-    );
+    gameOverState = false;
 
-    state = STATE.PLAYING;
+    gameStarted = false;
+
+
+    inventory = {
+
+        pao: 8,
+        carne: 8,
+        queijo: 8,
+        tomate: 8,
+        alface: 8,
+        molho: 8,
+        cebola: 8
+
+    };
+
+
+    scoreElement.textContent =
+        "0";
+
+    dayElement.textContent =
+        "1";
+
+    updateTimer();
+
+
+    startScreen.style.display =
+        "flex";
+
 
     speak(
-        "Novo jogo iniciado. Você tem três minutos. Pontuação zero.",
-        true
+        "Jogo reiniciado. Pressione Enter para começar."
     );
-
-    setTimeout(() => {
-
-        newOrder();
-
-    }, 1500);
 
 }
 
 
 /* =========================================================
-   TECLADO
-   ========================================================= */
+   MÚSICA ITALIANA ORIGINAL
+========================================================= */
 
-document.addEventListener("keydown", (e) => {
+let audioContext = null;
+
+let musicTimer = null;
+
+let musicPlaying = false;
+
+
+/*
+   Escala com clima de música italiana.
+*/
+
+const melody = [
+
+    659.25,
+    783.99,
+    880.00,
+    783.99,
+
+    659.25,
+    587.33,
+    523.25,
+    587.33,
+
+    659.25,
+    783.99,
+    987.77,
+    880.00,
+
+    783.99,
+    659.25,
+    587.33,
+    523.25
+
+];
+
+
+function playNote(
+    frequency,
+    duration,
+    startTime,
+    volume = .035
+) {
+
+    if (!audioContext) return;
+
+
+    const osc =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
+
 
     /*
-       evita comportamento padrão
-       de algumas teclas
+       Triângulo dá uma sensação
+       mais leve, parecida com
+       instrumento acústico.
     */
 
-    if (
-        [
-            " ",
-            "ArrowUp",
-            "ArrowDown",
-            "Enter",
-            "Backspace"
-        ].includes(e.key)
-    ) {
+    osc.type = "triangle";
 
-        e.preventDefault();
-
-    }
+    osc.frequency.value =
+        frequency;
 
 
-    /* ---------- TUTORIAL ---------- */
+    gain.gain.setValueAtTime(
+        0,
+        startTime
+    );
 
-    if (state === STATE.TUTORIAL) {
+    gain.gain.linearRampToValueAtTime(
+        volume,
+        startTime + .025
+    );
 
-        if (e.key === "Backspace") {
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        startTime + duration
+    );
 
-            tutorial();
 
-            return;
+    osc.connect(gain);
 
-        }
+    gain.connect(
+        audioContext.destination
+    );
 
-        if (e.key === "Enter") {
 
-            startGame();
+    osc.start(startTime);
 
-            return;
+    osc.stop(
+        startTime + duration
+    );
 
-        }
+}
 
+
+/* baixo */
+
+function playBass(
+    frequency,
+    startTime
+) {
+
+    if (!audioContext) return;
+
+
+    const osc =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
+
+
+    osc.type = "sine";
+
+    osc.frequency.value =
+        frequency;
+
+
+    gain.gain.setValueAtTime(
+        .0001,
+        startTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .025,
+        startTime + .03
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        startTime + .35
+    );
+
+
+    osc.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    osc.start(startTime);
+
+    osc.stop(
+        startTime + .4
+    );
+
+}
+
+
+/* =========================================================
+   LOOP MUSICAL
+========================================================= */
+
+function scheduleMusic() {
+
+    if (!musicPlaying ||
+        !audioContext) {
         return;
-
     }
 
 
-    /* ---------- GAME OVER ---------- */
+    const start =
+        audioContext.currentTime + .05;
 
-    if (state === STATE.GAMEOVER) {
 
-        if (e.key === "Enter") {
+    const beat = .28;
 
-            restartGame();
 
-            return;
+    melody.forEach(
+        (frequency, index) => {
+
+            playNote(
+                frequency,
+                .22,
+                start + index * beat
+            );
+
+        }
+    );
+
+
+    /*
+       baixo italiano simples
+    */
+
+    const bassNotes = [
+
+        130.81,
+        164.81,
+        146.83,
+        174.61
+
+    ];
+
+
+    bassNotes.forEach(
+        (frequency, index) => {
+
+            playBass(
+                frequency,
+                start + index * beat * 4
+            );
+
+        }
+    );
+
+
+    const loopDuration =
+        melody.length * beat;
+
+
+    musicTimer =
+        setTimeout(
+            scheduleMusic,
+            loopDuration * 1000
+        );
+
+}
+
+
+/* =========================================================
+   COMEÇAR MÚSICA
+========================================================= */
+
+function startItalianMusic() {
+
+    try {
+
+        if (!audioContext) {
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
 
         }
 
-        if (e.key === "Escape") {
-
-            location.reload();
-
-            return;
-
-        }
-
-        return;
-
-    }
-
-
-    /* ---------- BACKSPACE ---------- */
-
-    if (e.key === "Backspace") {
-
-        removeLastIngredient();
-
-        return;
-
-    }
-
-
-    /* ---------- EVENTO ---------- */
-
-    if (state === STATE.EVENT) {
-
-        if (e.key.toLowerCase() === "q") {
-
-            openRatOptions();
-
-            return;
-
-        }
-
-        if (e.key === "1") {
-
-            scareRat();
-
-            return;
-
-        }
-
-        if (e.key === "2") {
-
-            ignoreRat();
-
-            return;
-
-        }
-
-        if (e.key === "3") {
-
-            callManager();
-
-            return;
-
-        }
-
-        return;
-
-    }
-
-
-    /* ---------- Q ---------- */
-
-    if (e.key.toLowerCase() === "q") {
-
-        if (event) {
-
-            openRatOptions();
-
-        }
-
-        return;
-
-    }
-
-
-    /* ---------- E ---------- */
-
-    if (e.key.toLowerCase() === "e") {
-
-        startOrder();
-
-        return;
-
-    }
-
-
-    /* ---------- ENTER ---------- */
-
-    if (e.key === "Enter") {
 
         if (
-            currentOrder &&
-            currentOrder.prepared
+            audioContext.state ===
+            "suspended"
         ) {
 
-            deliverOrder();
-
-        } else {
-
-            prepareOrder();
+            audioContext.resume();
 
         }
 
-        return;
 
-    }
+        musicPlaying = true;
 
+        clearTimeout(musicTimer);
 
-    /* ---------- INGREDIENTES ---------- */
+        scheduleMusic();
 
-    if (ingredients[e.key]) {
+    } catch (error) {
 
-        chooseIngredient(e.key);
-
-        return;
-
-    }
-
-});
-
-
-/* ---------- BOTÃO INICIAL ---------- */
-
-document.getElementById("startButton")
-.addEventListener("click", () => {
-
-    startGame();
-
-});
-
-
-/* =========================================================
-   INICIAR
-   ========================================================= */
-
-function startGame() {
-
-    if (gameStarted) return;
-
-    gameStarted = true;
-
-    document
-        .getElementById("startOverlay")
-        .classList.add("hidden");
-
-    tutorial();
-
-}
-
-
-/* =========================================================
-   TEMPO
-   ========================================================= */
-
-function updateTime(delta) {
-
-    if (state !== STATE.PLAYING) return;
-
-    timeLeft -= delta;
-
-    if (timeLeft <= 0) {
-
-        timeLeft = 0;
-
-        gameOver();
-
-    }
-
-}
-
-
-/* ---------- FORMATAR TEMPO ---------- */
-
-function formatTime(seconds) {
-
-    seconds = Math.ceil(seconds);
-
-    const minutes =
-        Math.floor(seconds / 60);
-
-    const secs =
-        seconds % 60;
-
-    return `${minutes}:${String(secs).padStart(2, "0")}`;
-
-}
-
-
-/* =========================================================
-   EVENTOS ALEATÓRIOS
-   ========================================================= */
-
-let eventTimer = 0;
-
-function randomEvents(delta) {
-
-    if (state !== STATE.PLAYING) return;
-
-    eventTimer += delta;
-
-    /*
-       primeiro evento depois de aproximadamente
-       20 segundos.
-    */
-
-    if (
-        eventTimer > 20 &&
-        Math.random() < 0.0015
-    ) {
-
-        eventTimer = 0;
-
-        triggerRat();
+        console.log(
+            "Áudio não disponível:",
+            error
+        );
 
     }
 
@@ -1643,111 +2967,89 @@ function randomEvents(delta) {
 
 
 /* =========================================================
-   DESENHO
-   ========================================================= */
+   PARAR MÚSICA
+========================================================= */
 
-function draw() {
+function stopItalianMusic() {
 
-    drawKitchen();
+    musicPlaying = false;
 
-    drawUI();
+    clearTimeout(musicTimer);
 
-    drawRat();
+}
 
-    drawEventUI();
 
-    if (state === STATE.GAMEOVER) {
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
 
-        drawGameOver();
+updateTimer();
+
+
+setStatus(
+    "Passe o mouse sobre COMEÇAR — ENTER para ouvir."
+);
+
+
+/*
+   Também permite clicar no botão,
+   mas o jogo continua totalmente
+   jogável pelo teclado.
+*/
+
+startButton.addEventListener(
+    "click",
+    () => {
+
+        startGame();
 
     }
-
-}
-
-
-/* ---------- GAME OVER VISUAL ---------- */
-
-function drawGameOver() {
-
-    rect(
-        0,
-        0,
-        W,
-        H,
-        "rgba(0,0,0,.90)"
-    );
-
-    pixelText(
-        "💸 FALÊNCIA!",
-        320,
-        160,
-        50,
-        "#ef4444"
-    );
-
-    pixelText(
-        `Pontuação final: ${score}`,
-        310,
-        220,
-        25
-    );
-
-    pixelText(
-        `Recorde: ${bestScore}`,
-        340,
-        260,
-        22,
-        "#facc15"
-    );
-
-    pixelText(
-        "[ENTER] RECOMEÇAR",
-        330,
-        330,
-        24,
-        "#86efac"
-    );
-
-    pixelText(
-        "[ESC] MENU PRINCIPAL",
-        300,
-        370,
-        22,
-        "#93c5fd"
-    );
-
-}
+);
 
 
-/* =========================================================
-   LOOP PRINCIPAL
-   ========================================================= */
+restartButton.addEventListener(
+    "click",
+    () => {
 
-function gameLoop(now) {
+        restartGame();
 
-    const delta =
-        (now - lastTime) / 1000;
-
-    lastTime = now;
-
-    updateTime(delta);
-
-    randomEvents(delta);
-
-    draw();
-
-    requestAnimationFrame(gameLoop);
-
-}
-
-requestAnimationFrame(gameLoop);
+    }
+);
 
 
-/* =========================================================
-   INÍCIO
-   ========================================================= */
+/*
+   Quando o mouse passa por cima dos
+   ingredientes, fala o nome.
+*/
 
-draw();
+document
+    .querySelectorAll(".ingredient")
+    .forEach(element => {
+
+        element.addEventListener(
+            "mouseenter",
+            () => {
+
+                const key =
+                    element.dataset.key;
+
+                const ingredient =
+                    ingredients[key];
+
+                if (ingredient) {
+
+                    speak(
+                        `${ingredient.name}. Tecla ${key}.`,
+                        { rate: 1.7 }
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
 
 </script>
 
