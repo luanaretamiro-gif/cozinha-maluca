@@ -936,6 +936,21 @@ kbd {
     border-radius: 50%;
 }
 
+.pixel-cheddar {
+    background: #f2a33b;
+    border-radius: 8px;
+}
+
+.pixel-frango {
+    background: #f0c38a;
+    border-radius: 8px;
+}
+
+.pixel-catupiry {
+    background: #fff1d0;
+    border-radius: 8px;
+}
+
 .pixel-ketchup {
     background: #e22d2d;
     border-radius: 8px;
@@ -1502,6 +1517,16 @@ let normalClientsSinceSpecial = 0;
 
 let specialClientIndex = 0;
 
+// Ingredientes recém-desbloqueados que precisam aparecer em um pedido logo em seguida.
+let pendingUnlockedIngredients = [];
+
+// Registra quais ingredientes já foram desbloqueados de verdade.
+// Isso evita que um ingrediente seja "desbloqueado" novamente toda vez
+// que o estoque dele chegar a zero.
+let unlockedIngredientKeys = new Set([
+    "1", "2", "3", "4", "5", "6", "7"
+]);
+
 
 /* =========================================================
    ESTOQUE
@@ -1731,6 +1756,61 @@ const normalOrders = [
             tomate: 1,
             cebola: 1
         }
+    },
+
+    {
+        cliente: "Bianca",
+        prato: "X-cheddar",
+        ingredients: {
+            pao: 1,
+            carne: 1,
+            cheddar: 1,
+            tomate: 1
+        }
+    },
+
+    {
+        cliente: "Diego",
+        prato: "X-frango",
+        ingredients: {
+            pao: 1,
+            frango: 1,
+            queijo: 1,
+            alface: 1
+        }
+    },
+
+    {
+        cliente: "Marina",
+        prato: "X-catupiry",
+        ingredients: {
+            pao: 1,
+            carne: 1,
+            catupiry: 1,
+            tomate: 1
+        }
+    },
+
+    {
+        cliente: "Thiago",
+        prato: "X-bacon",
+        ingredients: {
+            pao: 1,
+            carne: 1,
+            queijo: 1,
+            bacon: 1
+        }
+    },
+
+    {
+        cliente: "Larissa",
+        prato: "X-molho verde",
+        ingredients: {
+            pao: 1,
+            carne: 1,
+            queijo: 1,
+            verde: 1
+        }
     }
 
 ];
@@ -1952,7 +2032,13 @@ const specialOrders = [
 
     { cliente: "Bolsonaro", prato: "X-Brasil", ingredients: { pao: 1, carne: 5, queijo: 3, bacon: 2, cebola: 2 } },
 
-    { cliente: "Scooby Doo", prato: "Scooby Burger", ingredients: { pao: 1, carne: 5, cheddar: 3, catupiry: 2, bacon: 2 } }
+    { cliente: "Scooby Doo", prato: "Scooby Burger", ingredients: { pao: 1, carne: 5, cheddar: 3, catupiry: 2, bacon: 2 } },
+
+    { cliente: "Cristiano Ronaldo", prato: "CR7 Frango", ingredients: { pao: 1, frango: 4, cheddar: 2, alface: 2 } },
+
+    { cliente: "Virgínia Fonseca", prato: "X-Catupiry da Virgínia", ingredients: { pao: 1, carne: 3, catupiry: 4, tomate: 2 } },
+
+    { cliente: "Vini Jr", prato: "X-Verde do Vini", ingredients: { pao: 1, carne: 4, verde: 3, queijo: 2 } }
 
 ];
 
@@ -2211,57 +2297,43 @@ function updateInventoryDisplay() {
 
 function checkUnlocks() {
 
-    const previouslyLocked =
-        [];
+    const newlyUnlocked = [];
 
+    Object.entries(ingredients).forEach(([key, item]) => {
 
-    Object.entries(
-        ingredients
-    ).forEach(
-        ([key, item]) => {
+        if (
+            item.unlock > 0 &&
+            score >= item.unlock &&
+            !unlockedIngredientKeys.has(key)
+        ) {
 
-            if (
-                item.unlock > 0 &&
-                score >= item.unlock &&
-                inventory[item.id] === 0
-            ) {
+            unlockedIngredientKeys.add(key);
+            inventory[item.id] = INITIAL_STOCK;
+            newlyUnlocked.push(item.name);
 
-                inventory[item.id] =
-                    INITIAL_STOCK;
-
-                previouslyLocked.push(
-                    item.name
-                );
-
+            if (!pendingUnlockedIngredients.includes(key)) {
+                pendingUnlockedIngredients.push(key);
             }
-
         }
-    );
 
+    });
 
-    if (
-        previouslyLocked.length
-    ) {
+    if (newlyUnlocked.length) {
 
-        const names =
-            previouslyLocked.join(", ");
-
+        const names = newlyUnlocked.join(", ");
 
         message(
             `🔓 DESBLOQUEADO: ${names}! +10 unidades`
         );
 
-
         speak(
-            `${names} desbloqueado. Você recebeu 10 unidades.`
+            `${names} desbloqueado. Você recebeu 10 unidades. O próximo cliente vai pedir esse ingrediente.`
         );
-
     }
 
-
     updateInventoryDisplay();
-
 }
+
 
 
 /* =========================================================
@@ -2383,9 +2455,66 @@ function orderUsesUnlockedIngredients(order) {
 
 function getNextOrder() {
 
-    if (shouldUseSpecialClient()) {
+    const wantsSpecial = shouldUseSpecialClient();
 
-        const availableSpecials = specialOrders.filter(orderUsesUnlockedIngredients);
+    /*
+       REGRA DE DESBLOQUEIO:
+       Assim que um ingrediente novo é desbloqueado, o PRÓXIMO cliente
+       obrigatoriamente recebe um pedido que usa esse ingrediente.
+       Se for a vez de um especial, usamos um especial compatível;
+       caso contrário, criamos um pedido normal simples.
+    */
+    if (pendingUnlockedIngredients.length) {
+
+        const pendingId = pendingUnlockedIngredients[0];
+
+        if (wantsSpecial) {
+            const matchingSpecial = specialOrders.find(order =>
+                order.ingredients[pendingId] > 0 &&
+                orderUsesUnlockedIngredients(order)
+            );
+
+            if (matchingSpecial) {
+                pendingUnlockedIngredients.shift();
+                specialClientIndex++;
+                normalClientsSinceSpecial = 0;
+
+                return {
+                    ...matchingSpecial,
+                    special: true
+                };
+            }
+        }
+
+        // Cliente normal: somente 1 unidade do ingrediente novo.
+        const item = ingredients[pendingId];
+        const normalUnlockOrder = {
+            cliente: `Cliente ${item.name}`,
+            prato: `Hambúrguer com ${item.name}`,
+            ingredients: {
+                pao: 1,
+                carne: 1,
+                [pendingId === "8" ? "cheddar" :
+                 pendingId === "9" ? "frango" :
+                 pendingId === "0" ? "catupiry" :
+                 pendingId === "-" ? "bacon" : "verde"]: 1
+            }
+        };
+
+        pendingUnlockedIngredients.shift();
+        orderIndex++;
+        normalClientsSinceSpecial++;
+
+        return {
+            ...normalUnlockOrder,
+            special: false
+        };
+    }
+
+    if (wantsSpecial) {
+
+        const availableSpecials =
+            specialOrders.filter(orderUsesUnlockedIngredients);
 
         if (availableSpecials.length) {
             const order = availableSpecials[
@@ -2402,8 +2531,11 @@ function getNextOrder() {
         }
     }
 
-    const availableNormals = normalOrders.filter(orderUsesUnlockedIngredients);
-    const order = availableNormals[orderIndex % availableNormals.length];
+    const availableNormals =
+        normalOrders.filter(orderUsesUnlockedIngredients);
+
+    const order =
+        availableNormals[orderIndex % availableNormals.length];
 
     orderIndex++;
     normalClientsSinceSpecial++;
@@ -2413,6 +2545,7 @@ function getNextOrder() {
         special: false
     };
 }
+
 
 
 /* =========================================================
@@ -3031,7 +3164,7 @@ const rainOrder = [
 ];
 
 let rainIndex = 0;
-
+let rainSequence = [];
 let collectedThisRain = 0;
 
 
@@ -3043,6 +3176,8 @@ function startIngredientRain() {
 
     rainActive = true;
 
+    stopItalianMusic();
+    startRainMusic();
 
     rainMode.style.display =
         "block";
@@ -3081,6 +3216,25 @@ function beginRainSequence() {
 
     collectedThisRain = 0;
 
+    // Todos os ingredientes já desbloqueados participam da chuva.
+    // O ingrediente que acabou sempre cai primeiro.
+    const unlockedKeys = Object.keys(ingredients)
+        .filter(key => isUnlocked(key));
+
+    const emptyKeys = unlockedKeys.filter(key => {
+        const item = ingredients[key];
+        return inventory[item.id] <= 0;
+    });
+
+    const otherKeys = unlockedKeys.filter(key => !emptyKeys.includes(key));
+
+    for (let i = otherKeys.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [otherKeys[i], otherKeys[j]] = [otherKeys[j], otherKeys[i]];
+    }
+
+    rainSequence = [...emptyKeys, ...otherKeys];
+
     nextFallingIngredient();
 
 }
@@ -3099,7 +3253,7 @@ function nextFallingIngredient() {
 
     if (
         rainIndex >=
-        rainOrder.length
+        rainSequence.length
     ) {
 
         finishRain();
@@ -3110,7 +3264,7 @@ function nextFallingIngredient() {
 
 
     const key =
-        rainOrder[
+        rainSequence[
             rainIndex
         ];
 
@@ -3291,9 +3445,11 @@ function collectRainIngredient(
 
     collectedThisRain++;
 
+    inventory[item.id] += RAIN_REWARD;
+    updateInventoryDisplay();
 
     speak(
-        `${item.name} coletado.`
+        `${item.name} coletado. Você recebeu ${RAIN_REWARD} unidades.`
     );
 
 
@@ -3357,45 +3513,18 @@ function finishRain() {
         "none";
 
 
-    /*
-       AQUI ESTÁ A NOVA REGRA:
-
-       +10 para CADA ingrediente desbloqueado,
-       independentemente de quanto ainda existia.
-    */
-
-    Object.entries(
-        ingredients
-    )
-    .forEach(
-        ([key, item]) => {
-
-            if (
-                isUnlocked(key)
-            ) {
-
-                inventory[
-                    item.id
-                ] += RAIN_REWARD;
-
-            }
-
-        }
-    );
-
-
     updateInventoryDisplay();
 
-
     rainInfo.textContent =
-        "🌧️ CHUVA ENCERRADA! +10 DE CADA INGREDIENTE!";
-
+        `🌧️ CHUVA ENCERRADA! ${collectedThisRain} ingrediente(s) coletado(s)!`;
 
     speakSequence([
 
         "Coleta encerrada.",
 
-        "Você recebeu dez unidades de cada ingrediente.",
+        `${collectedThisRain} ingrediente(s) foram coletados.`,
+
+        `Cada ingrediente coletado rendeu ${RAIN_REWARD} unidades.`,
 
         "Voltando à cozinha."
 
@@ -3407,8 +3536,9 @@ function finishRain() {
         rainMode.style.display =
             "none";
 
-
+        stopRainMusic();
         rainActive = false;
+        startItalianMusic();
 
 
         message(
@@ -3966,6 +4096,12 @@ function restartGame() {
 
     normalClientsSinceSpecial = 0;
 
+    pendingUnlockedIngredients = [];
+
+    unlockedIngredientKeys = new Set([
+        "1", "2", "3", "4", "5", "6", "7"
+    ]);
+
     currentOrder = null;
 
     selectedIngredients = [];
@@ -4314,6 +4450,60 @@ function scheduleMusic() {
             1000
         );
 
+}
+
+
+const rainMelody = [
+    523.25, 659.25, 783.99, 659.25,
+    587.33, 698.46, 880.00, 698.46,
+    523.25, 659.25, 783.99, 987.77,
+    880.00, 783.99, 659.25, 523.25
+];
+
+let rainMusicPlaying = false;
+let rainMusicTimer = null;
+
+function scheduleRainMusic() {
+    if (!rainMusicPlaying || !audioContext) return;
+
+    const start = audioContext.currentTime + 0.05;
+    const beat = 0.22;
+
+    rainMelody.forEach((note, index) => {
+        playNote(note, 0.17, start + index * beat);
+    });
+
+    [174.61, 196.00, 220.00, 246.94].forEach((note, index) => {
+        playBass(note, start + index * beat * 4);
+    });
+
+    rainMusicTimer = setTimeout(
+        scheduleRainMusic,
+        rainMelody.length * beat * 1000
+    );
+}
+
+function startRainMusic() {
+    try {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        if (audioContext.state === "suspended") {
+            audioContext.resume();
+        }
+
+        rainMusicPlaying = true;
+        clearTimeout(rainMusicTimer);
+        scheduleRainMusic();
+    } catch (error) {
+        console.log("Música da chuva indisponível.");
+    }
+}
+
+function stopRainMusic() {
+    rainMusicPlaying = false;
+    clearTimeout(rainMusicTimer);
 }
 
 
