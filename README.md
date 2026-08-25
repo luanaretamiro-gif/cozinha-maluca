@@ -10,10 +10,6 @@
 
 <style>
 
-/* =========================================================
-   CONFIGURAÇÃO GERAL
-========================================================= */
-
 * {
     box-sizing: border-box;
 }
@@ -44,11 +40,6 @@ kbd {
     font-weight: bold;
 }
 
-
-/* =========================================================
-   JOGO
-========================================================= */
-
 #game {
     width: min(1200px, 100%);
     min-height: 100vh;
@@ -66,7 +57,7 @@ kbd {
     top: 0;
     z-index: 100;
 
-    height: 76px;
+    min-height: 76px;
 
     display: flex;
     align-items: center;
@@ -91,6 +82,7 @@ kbd {
 .stats {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .stat {
@@ -109,9 +101,7 @@ kbd {
 
 #timer.danger {
     color: #ff4e4e;
-
-    animation:
-        blink .5s infinite alternate;
+    animation: blink .5s infinite alternate;
 }
 
 @keyframes blink {
@@ -126,7 +116,7 @@ kbd {
 
 
 /* =========================================================
-   ÁREA DA COZINHA
+   CENA
 ========================================================= */
 
 #scene {
@@ -148,13 +138,7 @@ kbd {
         );
 }
 
-
-/* =========================================================
-   PAREDE PIXELADA
-========================================================= */
-
 #scene::before {
-
     content: "";
 
     position: absolute;
@@ -259,7 +243,6 @@ kbd {
 ========================================================= */
 
 .station {
-
     position: absolute;
 
     bottom: 36%;
@@ -278,7 +261,6 @@ kbd {
 }
 
 .station span {
-
     position: absolute;
 
     left: 50%;
@@ -302,7 +284,6 @@ kbd {
 
 .grill {
     left: 50%;
-
     transform: translateX(-50%);
 }
 
@@ -311,12 +292,10 @@ kbd {
 }
 
 .ovenDoor {
-
     width: 120px;
     height: 60px;
 
     margin: auto;
-
     margin-top: 12px;
 
     background: #171717;
@@ -325,7 +304,6 @@ kbd {
 }
 
 .grillTop {
-
     width: 130px;
     height: 18px;
 
@@ -341,11 +319,10 @@ kbd {
 
 
 /* =========================================================
-   COZINHEIRO
+   CHEF
 ========================================================= */
 
 #chef {
-
     position: absolute;
 
     left: 50%;
@@ -363,7 +340,6 @@ kbd {
 }
 
 .head {
-
     position: absolute;
 
     left: 10px;
@@ -376,7 +352,6 @@ kbd {
 }
 
 .hat {
-
     position: absolute;
 
     left: 2px;
@@ -391,7 +366,6 @@ kbd {
 }
 
 .hat::before {
-
     content: "";
 
     position: absolute;
@@ -406,7 +380,6 @@ kbd {
 }
 
 .eye {
-
     position: absolute;
 
     width: 7px;
@@ -426,7 +399,6 @@ kbd {
 }
 
 .mouth {
-
     position: absolute;
 
     left: 18px;
@@ -439,7 +411,6 @@ kbd {
 }
 
 .body {
-
     position: absolute;
 
     bottom: 0;
@@ -451,7 +422,6 @@ kbd {
 }
 
 .arm {
-
     position: absolute;
 
     top: 68px;
@@ -476,11 +446,10 @@ kbd {
 
 
 /* =========================================================
-   BALCÃO / MENSAGEM
+   MENSAGEM
 ========================================================= */
 
 #messageBoard {
-
     position: absolute;
 
     left: 5%;
@@ -503,8 +472,7 @@ kbd {
             #472a1b
         );
 
-    border:
-        4px solid #a76334;
+    border: 4px solid #a76334;
 
     box-shadow:
         inset 0 0 0 3px #321c12;
@@ -526,7 +494,6 @@ kbd {
 ========================================================= */
 
 .food {
-
     position: absolute;
 
     width: 35px;
@@ -558,13 +525,12 @@ kbd {
 ========================================================= */
 
 #bottom {
-
     padding: 15px;
 
     display: grid;
 
     grid-template-columns:
-        1fr 1fr;
+        1fr 1.4fr;
 
     gap: 15px;
 
@@ -572,7 +538,6 @@ kbd {
 }
 
 .panel {
-
     min-height: 230px;
 
     padding: 16px;
@@ -583,7 +548,6 @@ kbd {
 }
 
 .panel-title {
-
     margin-bottom: 15px;
 
     color: #ffd83d;
@@ -594,9 +558,7 @@ kbd {
 }
 
 #orderText {
-
     font-size: 17px;
-
     line-height: 1.6;
 }
 
@@ -606,7 +568,6 @@ kbd {
 ========================================================= */
 
 #ingredientsList {
-
     display: grid;
 
     grid-template-columns:
@@ -616,8 +577,11 @@ kbd {
 }
 
 .ingredient {
+    position: relative;
 
-    padding: 10px 7px;
+    min-height: 76px;
+
+    padding: 7px;
 
     background: #1c2a42;
 
@@ -627,58 +591,61 @@ kbd {
 
     font-weight: bold;
 
-    transition:
-        background .15s,
-        border-color .15s;
+    cursor: pointer;
+
+    transition: .15s;
+}
+
+.ingredient:hover {
+    transform: translateY(-2px);
+    border-color: #ffd83d;
 }
 
 .ingredient.selected {
-
     background: #315c47;
 
     border-color: #72e092;
+
+    box-shadow:
+        0 0 8px rgba(114,224,146,.4);
 }
 
-.ingredient.low-stock {
+.ingredient.locked {
+    background: #10151f;
 
-    border-color: #d59a3a;
-}
+    border-color: #303746;
 
-.ingredient.empty {
+    color: #777;
 
-    background: #5a2525;
+    cursor: not-allowed;
 
-    border-color: #ff5757;
+    opacity: .65;
 }
 
 .key {
-
     color: #ffd83d;
 
     font-size: 20px;
 }
 
 .stock {
-
     display: block;
 
-    margin-top: 6px;
+    margin-top: 5px;
 
-    color: #ffffff;
+    color: #72e092;
 
     font-size: 12px;
-
-    font-weight: bold;
 }
 
-.ingredient.low-stock .stock {
+.lockText {
+    display: block;
 
-    color: #ffb347;
-}
+    margin-top: 5px;
 
-.ingredient.empty .stock {
+    color: #ff7777;
 
-    color: #ff5757;
+    font-size: 11px;
 }
 
 
@@ -687,7 +654,6 @@ kbd {
 ========================================================= */
 
 .overlay {
-
     position: fixed;
 
     inset: 0;
@@ -706,8 +672,11 @@ kbd {
 }
 
 .menuBox {
-
     width: min(760px, 95vw);
+
+    max-height: 92vh;
+
+    overflow-y: auto;
 
     padding: 30px;
 
@@ -722,7 +691,6 @@ kbd {
 }
 
 .menuTitle {
-
     color: #ffd83d;
 
     font-size:
@@ -737,7 +705,6 @@ kbd {
 }
 
 .startButton {
-
     padding: 17px 30px;
 
     background: #d75b38;
@@ -758,7 +725,6 @@ kbd {
 
 .startButton:hover,
 .startButton:focus {
-
     background: #f16d44;
 
     transform:
@@ -766,7 +732,6 @@ kbd {
 }
 
 .controls {
-
     margin-top: 25px;
 
     display: grid;
@@ -780,7 +745,6 @@ kbd {
 }
 
 .control {
-
     padding: 9px;
 
     background: #101827;
@@ -794,7 +758,6 @@ kbd {
 ========================================================= */
 
 #ratMenu {
-
     display: none;
 
     position: fixed;
@@ -823,7 +786,6 @@ kbd {
 }
 
 .ratOption {
-
     margin: 8px 0;
 
     padding: 12px;
@@ -835,11 +797,10 @@ kbd {
 
 
 /* =========================================================
-   CHUVA DE INGREDIENTES
+   CHUVA
 ========================================================= */
 
 #rainMode {
-
     display: none;
 
     position: fixed;
@@ -859,7 +820,6 @@ kbd {
 }
 
 #rainInfo {
-
     position: absolute;
 
     top: 20px;
@@ -890,7 +850,6 @@ kbd {
 }
 
 #rainGround {
-
     position: absolute;
 
     left: 0;
@@ -910,30 +869,61 @@ kbd {
         8px solid #b86b38;
 }
 
-.rainTarget {
-
+#rainChef {
     position: absolute;
 
     bottom: 30%;
 
-    width: 2px;
-    height: 2px;
-}
-
-#targetLeft {
-    left: 20%;
-}
-
-#targetCenter {
     left: 50%;
+
+    width: 70px;
+    height: 110px;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 15;
+
+    transition:
+        left .08s linear;
 }
 
-#targetRight {
-    left: 80%;
+.rainChefHead {
+    position: absolute;
+
+    top: 15px;
+    left: 10px;
+
+    width: 50px;
+    height: 50px;
+
+    background: #d99769;
+}
+
+.rainChefHat {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 70px;
+    height: 20px;
+
+    background: white;
+}
+
+.rainChefBody {
+    position: absolute;
+
+    bottom: 0;
+
+    width: 70px;
+    height: 60px;
+
+    background: white;
 }
 
 #fallingIngredient {
-
     position: absolute;
 
     width: 46px;
@@ -952,7 +942,7 @@ kbd {
 
 
 /* =========================================================
-   TIPOS DE INGREDIENTES DA CHUVA
+   TIPOS DE INGREDIENTES
 ========================================================= */
 
 .pixel-pao {
@@ -988,99 +978,88 @@ kbd {
     border-radius: 50%;
 }
 
-
-/* =========================================================
-   CHEF DA CHUVA
-========================================================= */
-
-#rainChef {
-
-    position: absolute;
-
-    bottom: 30%;
-
-    left: 50%;
-
-    width: 70px;
-    height: 110px;
-
-    transform:
-        translateX(-50%);
-
-    z-index: 15;
-
-    transition:
-        left .08s linear;
+.pixel-ketchup {
+    background: #e22d2d;
+    border-radius: 8px;
 }
 
-.rainChefHead {
-
-    position: absolute;
-
-    top: 15px;
-    left: 10px;
-
-    width: 50px;
-    height: 50px;
-
-    background: #d99769;
+.pixel-mostarda {
+    background: #e3c52f;
+    border-radius: 8px;
 }
 
-.rainChefHat {
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 70px;
-    height: 20px;
-
-    background: white;
+.pixel-verde {
+    background: #35a85b;
+    border-radius: 8px;
 }
 
-.rainChefBody {
+.pixel-bacon {
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #d65a45 0 7px,
+            #ffd0a0 7px 11px
+        );
+}
+
+.pixel-ovo {
+    background: #fff8dc;
+
+    border-radius:
+        50% 45% 50% 45%;
+}
+
+.pixel-ovo::after {
+    content: "";
 
     position: absolute;
 
-    bottom: 0;
+    width: 18px;
+    height: 18px;
 
-    width: 70px;
-    height: 60px;
+    background: #ffca28;
 
-    background: white;
+    border-radius: 50%;
+
+    left: 14px;
+    top: 14px;
 }
 
 
 /* =========================================================
-   GAME OVER
+   VITÓRIA / GAME OVER
 ========================================================= */
 
 #gameOver {
-
     display: none;
+}
+
+.victoryTitle {
+    color: #ffd83d;
+
+    font-size:
+        clamp(32px, 6vw, 58px);
+
+    font-weight: bold;
+
+    text-shadow:
+        4px 4px #70470f;
+}
+
+.victory {
+    border-color: #ffd83d;
 }
 
 
 /* =========================================================
-   RESPONSIVIDADE
+   RESPONSIVO
 ========================================================= */
 
 @media(max-width: 800px) {
 
     #topbar {
-
-        height: auto;
-
-        min-height: 70px;
-
         flex-direction: column;
-
         gap: 8px;
-    }
-
-    .stats {
-        font-size: 12px;
     }
 
     #scene {
@@ -1088,7 +1067,6 @@ kbd {
     }
 
     .station {
-
         transform:
             scale(.72);
 
@@ -1097,26 +1075,22 @@ kbd {
     }
 
     .grill {
-
         transform:
             translateX(-50%)
             scale(.72);
     }
 
     #bottom {
-
         grid-template-columns:
             1fr;
     }
 
     #ingredientsList {
-
         grid-template-columns:
-            repeat(2, 1fr);
+            repeat(3, 1fr);
     }
 
     .controls {
-
         grid-template-columns:
             1fr;
     }
@@ -1125,15 +1099,9 @@ kbd {
 </style>
 </head>
 
-
 <body>
 
 <div id="game">
-
-
-<!-- =====================================================
-     TOPO
-===================================================== -->
 
 <header id="topbar">
 
@@ -1160,81 +1128,39 @@ kbd {
 </header>
 
 
-<!-- =====================================================
-     COZINHA
-===================================================== -->
-
 <section id="scene">
 
     <div class="cloud cloud1"></div>
     <div class="cloud cloud2"></div>
 
-
     <div class="station oven">
-
         <div class="ovenDoor"></div>
-
-        <span>
-            FORNO
-        </span>
-
+        <span>FORNO</span>
     </div>
-
 
     <div class="station grill">
-
         <div class="grillTop"></div>
-
-        <span>
-            CHAPA
-        </span>
-
+        <span>CHAPA</span>
     </div>
-
 
     <div class="station counter">
-
-        <span>
-            BALCÃO
-        </span>
-
+        <span>BALCÃO</span>
     </div>
-
 
     <div class="floor"></div>
 
-
-    <div
-        class="food bread"
-        style="left:25%;">
-    </div>
-
-
-    <div
-        class="food tomato"
-        style="left:73%;">
-    </div>
-
-
-    <div
-        class="food lettuce"
-        style="left:82%;">
-    </div>
-
-
-    <!-- COZINHEIRO -->
+    <div class="food bread" style="left:25%;"></div>
+    <div class="food tomato" style="left:73%;"></div>
+    <div class="food lettuce" style="left:82%;"></div>
 
     <div id="chef">
 
         <div class="hat"></div>
 
         <div class="head">
-
             <div class="eye left"></div>
             <div class="eye right"></div>
-
             <div class="mouth"></div>
-
         </div>
 
         <div class="arm left"></div>
@@ -1244,9 +1170,6 @@ kbd {
 
     </div>
 
-
-    <!-- MENSAGEM -->
-
     <div id="messageBoard">
         Aguardando...
     </div>
@@ -1254,12 +1177,7 @@ kbd {
 </section>
 
 
-<!-- =====================================================
-     PAINÉIS
-===================================================== -->
-
 <section id="bottom">
-
 
     <div class="panel">
 
@@ -1282,115 +1200,100 @@ kbd {
 
         <div id="ingredientsList">
 
-            <div
-                class="ingredient"
-                data-key="1">
-
+            <div class="ingredient" data-key="1">
                 <span class="key">1</span>
                 Pão
-
-                <small
-                    class="stock"
-                    id="stock-pao">
+                <span class="stock" id="stock-pao">
                     10 unidades
-                </small>
-
+                </span>
             </div>
 
-
-            <div
-                class="ingredient"
-                data-key="2">
-
+            <div class="ingredient" data-key="2">
                 <span class="key">2</span>
                 Carne
-
-                <small
-                    class="stock"
-                    id="stock-carne">
+                <span class="stock" id="stock-carne">
                     10 unidades
-                </small>
-
+                </span>
             </div>
 
-
-            <div
-                class="ingredient"
-                data-key="3">
-
+            <div class="ingredient" data-key="3">
                 <span class="key">3</span>
                 Queijo
-
-                <small
-                    class="stock"
-                    id="stock-queijo">
+                <span class="stock" id="stock-queijo">
                     10 unidades
-                </small>
-
+                </span>
             </div>
 
-
-            <div
-                class="ingredient"
-                data-key="4">
-
+            <div class="ingredient" data-key="4">
                 <span class="key">4</span>
                 Tomate
-
-                <small
-                    class="stock"
-                    id="stock-tomate">
+                <span class="stock" id="stock-tomate">
                     10 unidades
-                </small>
-
+                </span>
             </div>
 
-
-            <div
-                class="ingredient"
-                data-key="5">
-
+            <div class="ingredient" data-key="5">
                 <span class="key">5</span>
                 Alface
-
-                <small
-                    class="stock"
-                    id="stock-alface">
+                <span class="stock" id="stock-alface">
                     10 unidades
-                </small>
-
+                </span>
             </div>
 
-
-            <div
-                class="ingredient"
-                data-key="6">
-
+            <div class="ingredient" data-key="6">
                 <span class="key">6</span>
                 Molho
-
-                <small
-                    class="stock"
-                    id="stock-molho">
+                <span class="stock" id="stock-molho">
                     10 unidades
-                </small>
-
+                </span>
             </div>
 
-
-            <div
-                class="ingredient"
-                data-key="7">
-
+            <div class="ingredient" data-key="7">
                 <span class="key">7</span>
                 Cebola
-
-                <small
-                    class="stock"
-                    id="stock-cebola">
+                <span class="stock" id="stock-cebola">
                     10 unidades
-                </small>
+                </span>
+            </div>
 
+            <div class="ingredient locked" data-key="8">
+                <span class="key">8</span>
+                Ketchup
+                <span class="stock" id="stock-ketchup">
+                    BLOQUEADO
+                </span>
+            </div>
+
+            <div class="ingredient locked" data-key="9">
+                <span class="key">9</span>
+                Mostarda
+                <span class="stock" id="stock-mostarda">
+                    BLOQUEADO
+                </span>
+            </div>
+
+            <div class="ingredient locked" data-key="0">
+                <span class="key">0</span>
+                Molho Verde
+                <span class="stock" id="stock-verde">
+                    BLOQUEADO
+                </span>
+            </div>
+
+            <div class="ingredient locked" data-key="-">
+                <span class="key">−</span>
+                Bacon
+                <span class="stock" id="stock-bacon">
+                    BLOQUEADO
+                </span>
+            </div>
+
+            <div class="ingredient locked" data-key="+">
+                <span class="key">+</span>
+                Ovo
+                <span class="stock" id="stock-ovo">
+                    BLOQUEADO
+                </span>
             </div>
 
         </div>
@@ -1398,10 +1301,9 @@ kbd {
         <br>
 
         <strong>
-            E = ouvir pedido
-            |
-            Backspace = remover
-            |
+            E = ouvir pedido |
+            1–9, 0, −, + = ingredientes |
+            Backspace = remover |
             Enter = preparar/entregar
         </strong>
 
@@ -1414,9 +1316,7 @@ kbd {
      TELA INICIAL
 ===================================================== -->
 
-<div
-    id="startScreen"
-    class="overlay">
+<div id="startScreen" class="overlay">
 
     <div class="menuBox">
 
@@ -1427,18 +1327,75 @@ kbd {
         <p>
             Prepare os pedidos,
             sobreviva ao caos
-            e mantenha seu restaurante vivo!
+            e torne-se o melhor chefe de Ubiratã!
         </p>
 
-        <p style="color:#ffd83d; font-weight:bold;">
-            🧺 ESTOQUE INICIAL
-        </p>
+        <div style="
+            background:#101827;
+            border:3px solid #ffd83d;
+            padding:15px;
+            margin:20px 0;
+            line-height:1.8;
+        ">
 
-        <p>
+            <strong style="color:#ffd83d;">
+                🧺 ESTOQUE INICIAL
+            </strong>
+
+            <br>
+
             Você começa com
-            <strong>10 unidades de cada ingrediente!</strong>
-        </p>
+            <strong>10 unidades de CADA ingrediente.</strong>
 
+            <br>
+
+            Quando qualquer ingrediente chegar a
+            <strong>0</strong>,
+            começa a chuva de ingredientes!
+
+            <br>
+
+            A chuva adicionará
+            <strong>+10 de TODOS os ingredientes.</strong>
+
+        </div>
+
+        <div style="
+            background:#101827;
+            border:2px solid #334663;
+            padding:12px;
+            margin-bottom:20px;
+        ">
+
+            <strong style="color:#ffd83d;">
+                🔓 DESBLOQUEIOS
+            </strong>
+
+            <br><br>
+
+            ⭐ 1800 — Ketchup
+
+            <br>
+
+            ⭐ 2350 — Mostarda
+
+            <br>
+
+            ⭐ 2670 — Molho Verde
+
+            <br>
+
+            ⭐ 2900 — Bacon
+
+            <br>
+
+            ⭐ 3450 — Ovo
+
+            <br><br>
+
+            🏆 <strong>4000 pontos = MELHOR CHEFE DE UBIRATÃ!</strong>
+
+        </div>
 
         <button
             id="startButton"
@@ -1447,7 +1404,6 @@ kbd {
             COMEÇAR — ENTER
 
         </button>
-
 
         <div class="controls">
 
@@ -1462,8 +1418,13 @@ kbd {
             </div>
 
             <div class="control">
-                <kbd>1–7</kbd>
+                <kbd>1–9 / 0</kbd>
                 Ingredientes
+            </div>
+
+            <div class="control">
+                <kbd>− / +</kbd>
+                Bacon / Ovo
             </div>
 
             <div class="control">
@@ -1478,12 +1439,12 @@ kbd {
 
             <div class="control">
                 <kbd>A / ←</kbd>
-                Andar para esquerda
+                Esquerda
             </div>
 
             <div class="control">
                 <kbd>D / →</kbd>
-                Andar para direita
+                Direita
             </div>
 
         </div>
@@ -1499,7 +1460,7 @@ kbd {
 
 
 <!-- =====================================================
-     MENU DO RATO
+     RATO
 ===================================================== -->
 
 <div id="ratMenu">
@@ -1513,25 +1474,19 @@ kbd {
     </p>
 
     <div class="ratOption">
-        <strong>
-            1 — ESPANTAR
-        </strong>
+        <strong>1 — ESPANTAR</strong>
         <br>
         O rato derruba um ingrediente.
     </div>
 
     <div class="ratOption">
-        <strong>
-            2 — IGNORAR
-        </strong>
+        <strong>2 — IGNORAR</strong>
         <br>
         O rato come um ingrediente.
     </div>
 
     <div class="ratOption">
-        <strong>
-            3 — CHAMAR O GERENTE
-        </strong>
+        <strong>3 — CHAMAR O GERENTE</strong>
         <br>
         O gerente resolve o problema,
         mas custa 50 pontos.
@@ -1541,7 +1496,7 @@ kbd {
 
 
 <!-- =====================================================
-     CHUVA DE INGREDIENTES
+     CHUVA
 ===================================================== -->
 
 <div id="rainMode">
@@ -1551,7 +1506,6 @@ kbd {
     </div>
 
     <div id="rainGround"></div>
-
 
     <div id="rainChef">
 
@@ -1563,28 +1517,24 @@ kbd {
 
     </div>
 
-
     <div id="fallingIngredient"></div>
 
 </div>
 
 
 <!-- =====================================================
-     GAME OVER
+     GAME OVER / VITÓRIA
 ===================================================== -->
 
-<div
-    id="gameOver"
-    class="overlay">
+<div id="gameOver" class="overlay">
 
     <div class="menuBox">
 
-        <div
-            style="
-            color:#ff5757;
-            font-size:45px;
-            font-weight:bold;">
-            FALÊNCIA!
+        <div id="gameOverTitle"
+             class="victoryTitle">
+
+            🏆 FIM DE JOGO!
+
         </div>
 
         <p id="gameOverText">
@@ -1619,6 +1569,12 @@ const ORDER_POINTS = 150;
 
 const BONUS_TIME = 7;
 
+const INITIAL_STOCK = 10;
+
+const RAIN_REWARD = 10;
+
+const WIN_SCORE = 4000;
+
 
 /* =========================================================
    ELEMENTOS
@@ -1635,6 +1591,9 @@ const restartButton =
 
 const gameOver =
     document.getElementById("gameOver");
+
+const gameOverTitle =
+    document.getElementById("gameOverTitle");
 
 const gameOverText =
     document.getElementById("gameOverText");
@@ -1683,6 +1642,8 @@ let gameStarted = false;
 
 let gameOverState = false;
 
+let victoryState = false;
+
 let ratMode = false;
 
 let rainActive = false;
@@ -1707,13 +1668,16 @@ let preparing = false;
 
 let orderIndex = 0;
 
+let normalClientsSinceSpecial = 0;
+
+let specialClientIndex = 0;
+
 
 /* =========================================================
    ESTOQUE
-   AGORA SÃO 10 UNIDADES DE CADA
 ========================================================= */
 
-let inventory = {
+const makeInitialInventory = () => ({
 
     pao: 10,
 
@@ -1727,9 +1691,23 @@ let inventory = {
 
     molho: 10,
 
-    cebola: 10
+    cebola: 10,
 
-};
+    ketchup: 0,
+
+    mostarda: 0,
+
+    verde: 0,
+
+    bacon: 0,
+
+    ovo: 0
+
+});
+
+
+let inventory =
+    makeInitialInventory();
 
 
 /* =========================================================
@@ -1741,100 +1719,473 @@ const ingredients = {
     "1": {
         id: "pao",
         name: "Pão",
-        css: "pixel-pao"
+        css: "pixel-pao",
+        unlock: 0
     },
 
     "2": {
         id: "carne",
         name: "Carne",
-        css: "pixel-carne"
+        css: "pixel-carne",
+        unlock: 0
     },
 
     "3": {
         id: "queijo",
         name: "Queijo",
-        css: "pixel-queijo"
+        css: "pixel-queijo",
+        unlock: 0
     },
 
     "4": {
         id: "tomate",
         name: "Tomate",
-        css: "pixel-tomate"
+        css: "pixel-tomate",
+        unlock: 0
     },
 
     "5": {
         id: "alface",
         name: "Alface",
-        css: "pixel-alface"
+        css: "pixel-alface",
+        unlock: 0
     },
 
     "6": {
         id: "molho",
         name: "Molho",
-        css: "pixel-molho"
+        css: "pixel-molho",
+        unlock: 0
     },
 
     "7": {
         id: "cebola",
         name: "Cebola",
-        css: "pixel-cebola"
+        css: "pixel-cebola",
+        unlock: 0
+    },
+
+    "8": {
+        id: "ketchup",
+        name: "Ketchup",
+        css: "pixel-ketchup",
+        unlock: 1800
+    },
+
+    "9": {
+        id: "mostarda",
+        name: "Mostarda",
+        css: "pixel-mostarda",
+        unlock: 2350
+    },
+
+    "0": {
+        id: "verde",
+        name: "Molho verde",
+        css: "pixel-verde",
+        unlock: 2670
+    },
+
+    "-": {
+        id: "bacon",
+        name: "Bacon",
+        css: "pixel-bacon",
+        unlock: 2900
+    },
+
+    "+": {
+        id: "ovo",
+        name: "Ovo",
+        css: "pixel-ovo",
+        unlock: 3450
     }
 
 };
 
 
 /* =========================================================
-   PEDIDOS
+   CLIENTES NORMAIS
 ========================================================= */
 
-const orders = [
+const normalOrders = [
 
     {
         cliente: "Maria",
-        prato: "Hambúrguer",
-        ingredients: [
-            "pao",
-            "carne",
-            "queijo",
-            "tomate"
-        ]
+        prato: "Hambúrguer clássico",
+        ingredients: {
+            pao: 1,
+            carne: 1,
+            queijo: 1,
+            tomate: 1
+        }
     },
 
     {
         cliente: "João",
         prato: "Hambúrguer completo",
-        ingredients: [
-            "pao",
-            "carne",
-            "queijo",
-            "alface",
-            "molho"
-        ]
+        ingredients: {
+            pao: 1,
+            carne: 1,
+            queijo: 1,
+            alface: 1,
+            molho: 1
+        }
     },
 
     {
         cliente: "Ana",
-        prato: "Hambúrguer especial",
-        ingredients: [
-            "pao",
-            "carne",
-            "queijo",
-            "tomate",
-            "cebola"
-        ]
+        prato: "X-salada",
+        ingredients: {
+            pao: 1,
+            carne: 1,
+            queijo: 1,
+            alface: 1,
+            tomate: 1,
+            molho: 1
+        }
     },
 
     {
         cliente: "Pedro",
-        prato: "X-salada",
-        ingredients: [
-            "pao",
-            "carne",
-            "queijo",
-            "alface",
-            "tomate",
-            "molho"
-        ]
+        prato: "X-bacon simples",
+        ingredients: {
+            pao: 1,
+            carne: 1,
+            queijo: 1,
+            bacon: 1
+        }
+    },
+
+    {
+        cliente: "Carlos",
+        prato: "Duplo queijo",
+        ingredients: {
+            pao: 1,
+            carne: 2,
+            queijo: 2,
+            tomate: 1
+        }
+    },
+
+    {
+        cliente: "Juliana",
+        prato: "Salada reforçada",
+        ingredients: {
+            pao: 1,
+            carne: 1,
+            alface: 2,
+            tomate: 2,
+            cebola: 1
+        }
+    },
+
+    {
+        cliente: "Lucas",
+        prato: "Hambúrguer triplo",
+        ingredients: {
+            pao: 1,
+            carne: 3,
+            queijo: 2,
+            molho: 1
+        }
+    },
+
+    {
+        cliente: "Beatriz",
+        prato: "X-tudo",
+        ingredients: {
+            pao: 1,
+            carne: 2,
+            queijo: 2,
+            tomate: 2,
+            alface: 2,
+            cebola: 2,
+            molho: 1
+        }
+    },
+
+    {
+        cliente: "Rafael",
+        prato: "Duplo tomate",
+        ingredients: {
+            pao: 1,
+            carne: 1,
+            queijo: 1,
+            tomate: 2,
+            cebola: 1
+        }
+    },
+
+    {
+        cliente: "Camila",
+        prato: "Mega alface",
+        ingredients: {
+            pao: 1,
+            carne: 2,
+            queijo: 1,
+            alface: 3,
+            tomate: 1
+        }
+    },
+
+    {
+        cliente: "Bruno",
+        prato: "Hambúrguer ceboleiro",
+        ingredients: {
+            pao: 1,
+            carne: 2,
+            queijo: 2,
+            cebola: 3,
+            molho: 1
+        }
+    },
+
+    {
+        cliente: "Fernanda",
+        prato: "Monstro de 5 carnes",
+        ingredients: {
+            pao: 1,
+            carne: 5,
+            queijo: 3,
+            tomate: 2,
+            alface: 2
+        }
+    },
+
+    {
+        cliente: "Gustavo",
+        prato: "Hambúrguer 10 carnes",
+        ingredients: {
+            pao: 1,
+            carne: 10
+        }
+    },
+
+    {
+        cliente: "Paula",
+        prato: "Torre de queijo",
+        ingredients: {
+            pao: 1,
+            carne: 2,
+            queijo: 5,
+            tomate: 2,
+            alface: 2
+        }
+    },
+
+    {
+        cliente: "Roberto",
+        prato: "Saladão gigante",
+        ingredients: {
+            pao: 1,
+            carne: 2,
+            alface: 5,
+            tomate: 5,
+            cebola: 3
+        }
+    }
+
+];
+
+
+/* =========================================================
+   CLIENTES ESPECIAIS
+========================================================= */
+
+const specialOrders = [
+
+    {
+        cliente: "Felipe Neto",
+        prato: "Hambúrguer exagerado do Felipe",
+        ingredients: {
+            pao: 1,
+            carne: 3,
+            queijo: 3,
+            tomate: 2,
+            alface: 2,
+            molho: 2
+        }
+    },
+
+    {
+        cliente: "Zeca Pagodinho",
+        prato: "X-samba",
+        ingredients: {
+            pao: 1,
+            carne: 2,
+            queijo: 2,
+            tomate: 2,
+            cebola: 2,
+            molho: 2
+        }
+    },
+
+    {
+        cliente: "Ronaldinho Gaúcho",
+        prato: "X-Gaúcho",
+        ingredients: {
+            pao: 1,
+            carne: 4,
+            queijo: 3,
+            alface: 2,
+            tomate: 2,
+            cebola: 1
+        }
+    },
+
+    {
+        cliente: "Neymar",
+        prato: "Hambúrguer driblador",
+        ingredients: {
+            pao: 1,
+            carne: 3,
+            queijo: 3,
+            alface: 2,
+            tomate: 3,
+            molho: 2
+        }
+    },
+
+    {
+        cliente: "Pai do Bebê",
+        prato: "Hambúrguer do papai",
+        ingredients: {
+            pao: 1,
+            carne: 2,
+            queijo: 2,
+            alface: 2,
+            tomate: 2,
+            cebola: 2
+        }
+    },
+
+    {
+        cliente: "Sosô Careca",
+        prato: "X-careca especial",
+        ingredients: {
+            pao: 1,
+            carne: 5,
+            queijo: 4,
+            tomate: 2,
+            molho: 2
+        }
+    },
+
+    {
+        cliente: "Liz Maiscedo",
+        prato: "Hambúrguer da Liz",
+        ingredients: {
+            pao: 1,
+            carne: 2,
+            queijo: 3,
+            alface: 3,
+            tomate: 2,
+            cebola: 2
+        }
+    },
+
+    {
+        cliente: "Luluca",
+        prato: "X-Luluca",
+        ingredients: {
+            pao: 1,
+            carne: 3,
+            queijo: 3,
+            alface: 3,
+            tomate: 3,
+            molho: 2
+        }
+    },
+
+    {
+        cliente: "Rainha Elizabeth",
+        prato: "Hambúrguer real",
+        ingredients: {
+            pao: 1,
+            carne: 4,
+            queijo: 4,
+            tomate: 2,
+            alface: 2,
+            cebola: 2
+        }
+    },
+
+    {
+        cliente: "Anitta",
+        prato: "X-Anitta",
+        ingredients: {
+            pao: 1,
+            carne: 3,
+            queijo: 3,
+            tomate: 3,
+            alface: 2,
+            cebola: 2
+        }
+    },
+
+    {
+        cliente: "Malala",
+        prato: "Hambúrguer especial",
+        ingredients: {
+            pao: 1,
+            carne: 2,
+            queijo: 2,
+            alface: 4,
+            tomate: 2,
+            cebola: 2
+        }
+    },
+
+    {
+        cliente: "Virgínia Fonseca",
+        prato: "X-Virgínia",
+        ingredients: {
+            pao: 1,
+            carne: 4,
+            queijo: 4,
+            tomate: 3,
+            alface: 3,
+            molho: 2
+        }
+    },
+
+    {
+        cliente: "Zé Felipe",
+        prato: "X-Felipe",
+        ingredients: {
+            pao: 1,
+            carne: 5,
+            queijo: 3,
+            tomate: 2,
+            cebola: 3,
+            molho: 2
+        }
+    },
+
+    {
+        cliente: "Vini Jr",
+        prato: "Hambúrguer velocidade máxima",
+        ingredients: {
+            pao: 1,
+            carne: 4,
+            queijo: 3,
+            alface: 3,
+            tomate: 3,
+            cebola: 2
+        }
+    },
+
+    {
+        cliente: "Zago",
+        prato: "Hambúrguer do Zago",
+        ingredients: {
+            pao: 1,
+            carne: 6,
+            queijo: 4,
+            tomate: 2,
+            alface: 2,
+            cebola: 2
+        }
     }
 
 ];
@@ -1848,7 +2199,6 @@ const synth =
     window.speechSynthesis;
 
 let voices = [];
-
 
 function loadVoices() {
 
@@ -1865,7 +2215,6 @@ if (synth) {
         loadVoices;
 
 }
-
 
 function getPortugueseVoice() {
 
@@ -1907,12 +2256,8 @@ function speak(text) {
     const voice =
         getPortugueseVoice();
 
-    if (voice) {
-
-        utter.voice =
-            voice;
-
-    }
+    if (voice)
+        utter.voice = voice;
 
     utter.lang =
         voice
@@ -1939,16 +2284,12 @@ function speakSequence(list) {
 
     let index = 0;
 
-
     function next() {
 
         if (
             index >= list.length
-        ) {
-
+        )
             return;
-
-        }
 
         const utter =
             new SpeechSynthesisUtterance(
@@ -1958,12 +2299,8 @@ function speakSequence(list) {
         const voice =
             getPortugueseVoice();
 
-        if (voice) {
-
-            utter.voice =
-                voice;
-
-        }
+        if (voice)
+            utter.voice = voice;
 
         utter.lang =
             voice
@@ -2007,68 +2344,128 @@ function message(text) {
 
 
 /* =========================================================
-   ATUALIZAR ESTOQUE NA TELA
+   ESTOQUE / DESBLOQUEIOS
 ========================================================= */
 
-function updateInventoryVisual() {
+function isUnlocked(key) {
 
-    Object.keys(inventory).forEach(id => {
+    const item =
+        ingredients[key];
 
-        const stockElement =
-            document.getElementById(
-                `stock-${id}`
-            );
+    return score >= item.unlock;
 
-        if (!stockElement)
-            return;
+}
 
 
-        const amount =
-            inventory[id];
+function updateInventoryDisplay() {
 
+    document
+        .querySelectorAll(".ingredient")
+        .forEach(button => {
 
-        stockElement.textContent =
-            `${amount} ${
-                amount === 1
-                    ? "unidade"
-                    : "unidades"
-            }`;
+            const key =
+                button.dataset.key;
 
+            const item =
+                ingredients[key];
 
-        const key =
-            Object.keys(ingredients)
-                .find(
-                    k =>
-                        ingredients[k].id === id
+            const stockElement =
+                button.querySelector(".stock");
+
+            if (!isUnlocked(key)) {
+
+                button.classList.add(
+                    "locked"
                 );
 
+                stockElement.textContent =
+                    `🔒 ${item.unlock} pontos`;
 
-        if (!key)
-            return;
+            } else {
+
+                button.classList.remove(
+                    "locked"
+                );
+
+                stockElement.textContent =
+                    `${inventory[item.id]} unidades`;
+
+                if (
+                    inventory[item.id] <= 0
+                ) {
+
+                    stockElement.style.color =
+                        "#ff5757";
+
+                } else {
+
+                    stockElement.style.color =
+                        "#72e092";
+
+                }
+
+            }
+
+        });
+
+}
 
 
-        const ingredientElement =
-            document.querySelector(
-                `.ingredient[data-key="${key}"]`
-            );
+/* =========================================================
+   DESBLOQUEIOS
+========================================================= */
+
+function checkUnlocks() {
+
+    const previouslyLocked =
+        [];
 
 
-        if (!ingredientElement)
-            return;
+    Object.entries(
+        ingredients
+    ).forEach(
+        ([key, item]) => {
+
+            if (
+                item.unlock > 0 &&
+                score >= item.unlock &&
+                inventory[item.id] === 0
+            ) {
+
+                inventory[item.id] =
+                    INITIAL_STOCK;
+
+                previouslyLocked.push(
+                    item.name
+                );
+
+            }
+
+        }
+    );
 
 
-        ingredientElement.classList.toggle(
-            "low-stock",
-            amount > 0 && amount <= 3
+    if (
+        previouslyLocked.length
+    ) {
+
+        const names =
+            previouslyLocked.join(", ");
+
+
+        message(
+            `🔓 DESBLOQUEADO: ${names}! +10 unidades`
         );
 
 
-        ingredientElement.classList.toggle(
-            "empty",
-            amount <= 0
+        speak(
+            `${names} desbloqueado. Você recebeu 10 unidades.`
         );
 
-    });
+    }
+
+
+    updateInventoryDisplay();
 
 }
 
@@ -2122,16 +2519,12 @@ function startTimer() {
                 gameOverState ||
                 rainActive ||
                 ratMode
-            ) {
-
+            )
                 return;
-
-            }
 
             timeLeft--;
 
             updateTimer();
-
 
             if (
                 timeLeft <= 0
@@ -2151,6 +2544,93 @@ function startTimer() {
 
 
 /* =========================================================
+   FORMATAR PEDIDO
+========================================================= */
+
+function orderToText(order) {
+
+    return Object.entries(
+        order.ingredients
+    )
+    .map(
+        ([id, amount]) => {
+
+            const item =
+                Object.values(
+                    ingredients
+                )
+                .find(
+                    i =>
+                        i.id === id
+                );
+
+            return amount > 1
+                ? `${amount}x ${item.name}`
+                : item.name;
+
+        }
+    )
+    .join(" + ");
+
+}
+
+
+/* =========================================================
+   PEDIDO ESPECIAL
+========================================================= */
+
+function shouldUseSpecialClient() {
+
+    return (
+        normalClientsSinceSpecial >= 4
+    );
+
+}
+
+
+function getNextOrder() {
+
+    if (
+        shouldUseSpecialClient()
+    ) {
+
+        const order =
+            specialOrders[
+                specialClientIndex %
+                specialOrders.length
+            ];
+
+        specialClientIndex++;
+
+        normalClientsSinceSpecial = 0;
+
+        return {
+            ...order,
+            special: true
+        };
+
+    }
+
+
+    const order =
+        normalOrders[
+            orderIndex %
+            normalOrders.length
+        ];
+
+    orderIndex++;
+
+    normalClientsSinceSpecial++;
+
+    return {
+        ...order,
+        special: false
+    };
+
+}
+
+
+/* =========================================================
    NOVO PEDIDO
 ========================================================= */
 
@@ -2161,12 +2641,7 @@ function createOrder() {
 
 
     currentOrder =
-        orders[
-            orderIndex %
-            orders.length
-        ];
-
-    orderIndex++;
+        getNextOrder();
 
 
     selectedIngredients = [];
@@ -2177,16 +2652,24 @@ function createOrder() {
     updateIngredientVisual();
 
 
+    const specialText =
+        currentOrder.special
+            ? " ⭐ CLIENTE ESPECIAL!"
+            : "";
+
+
     orderText.innerHTML = `
 
         <strong>
-            🔔 NOVO PEDIDO!
+            🔔 NOVO PEDIDO!${specialText}
         </strong>
 
         <br><br>
 
         Cliente:
-        ${currentOrder.cliente}
+        <strong>
+            ${currentOrder.cliente}
+        </strong>
 
         <br>
 
@@ -2202,12 +2685,16 @@ function createOrder() {
 
 
     message(
-        "🔔 Novo pedido! Pressione E."
+        currentOrder.special
+            ? `⭐ CLIENTE ESPECIAL: ${currentOrder.cliente}!`
+            : "🔔 Novo pedido! Pressione E."
     );
 
 
     speak(
-        `Novo pedido. Cliente ${currentOrder.cliente}. Pressione E.`
+        currentOrder.special
+            ? `Atenção! Cliente especial. ${currentOrder.cliente} fez um pedido especial. Pressione E para ouvir.`
+            : `Novo pedido. Cliente ${currentOrder.cliente}. Pressione E.`
     );
 
 }
@@ -2227,20 +2714,10 @@ function readOrder() {
         return;
 
 
-    const names =
-        currentOrder.ingredients
-            .map(
-                id =>
-                    Object
-                        .values(
-                            ingredients
-                        )
-                        .find(
-                            i =>
-                                i.id === id
-                        )
-                        .name
-            );
+    const orderDescription =
+        orderToText(
+            currentOrder
+        );
 
 
     orderText.innerHTML = `
@@ -2258,20 +2735,38 @@ function readOrder() {
 
         <br><br>
 
-        ${names.join(" + ")}
+        ${orderDescription}
 
     `;
 
 
-    speak(
-        `Pedido de ${currentOrder.cliente}. ${currentOrder.prato}. Ingredientes: ${names.join(", ")}.`
-    );
+    if (
+        currentOrder.special
+    ) {
+
+        speakSequence([
+
+            `Pedido especial de ${currentOrder.cliente}.`,
+
+            `${currentOrder.prato}.`,
+
+            `Ingredientes: ${orderDescription}.`
+
+        ]);
+
+    } else {
+
+        speak(
+            `Pedido de ${currentOrder.cliente}. ${currentOrder.prato}. Ingredientes: ${orderDescription}.`
+        );
+
+    }
 
 }
 
 
 /* =========================================================
-   PEGAR INGREDIENTE
+   SELECIONAR INGREDIENTE
 ========================================================= */
 
 function selectIngredient(key) {
@@ -2295,25 +2790,34 @@ function selectIngredient(key) {
         return;
 
 
-    /* estoque acabou */
-
-    if (
-        inventory[
-            ingredient.id
-        ] <= 0
-    ) {
+    if (!isUnlocked(key)) {
 
         speak(
-            `${ingredient.name} acabou. A chuva de ingredientes já vai começar.`
+            `${ingredient.name} está bloqueado. Você precisa de ${ingredient.unlock} pontos.`
         );
 
         message(
-            `❌ ${ingredient.name} acabou! 🌧️`
+            `🔒 ${ingredient.name}: desbloqueia com ${ingredient.unlock} pontos.`
         );
 
+        return;
+
+    }
+
+
+    if (
+        inventory[ingredient.id] <= 0
+    ) {
+
+        speak(
+            `${ingredient.name} acabou.`
+        );
+
+        message(
+            `❌ ${ingredient.name} acabou.`
+        );
 
         checkInventory();
-
 
         return;
 
@@ -2325,16 +2829,14 @@ function selectIngredient(key) {
     ]--;
 
 
-    updateInventoryVisual();
-
-
-    selectedIngredients
-        .push(
-            ingredient.id
-        );
+    selectedIngredients.push(
+        ingredient.id
+    );
 
 
     updateIngredientVisual();
+
+    updateInventoryDisplay();
 
 
     speak(
@@ -2347,31 +2849,74 @@ function selectIngredient(key) {
     );
 
 
-    /* ingrediente errado */
-
-    if (
-        !currentOrder
-            .ingredients
-            .includes(
-                ingredient.id
-            )
-    ) {
-
-        speak(
-            `${ingredient.name}. Atenção: o pedido não contém ${ingredient.name.toLowerCase()}. Pressione Backspace para remover.`
-        );
-
-        checkInventory();
-
-        return;
-
-    }
-
-
     checkOrderReady();
 
-
     checkInventory();
+
+}
+
+
+/* =========================================================
+   CONTAGEM DOS INGREDIENTES SELECIONADOS
+========================================================= */
+
+function countIngredients(list) {
+
+    const counts = {};
+
+    list.forEach(
+        id => {
+
+            counts[id] =
+                (counts[id] || 0) + 1;
+
+        }
+    );
+
+    return counts;
+
+}
+
+
+/* =========================================================
+   PEDIDO CORRETO
+========================================================= */
+
+function orderIsExact() {
+
+    if (!currentOrder)
+        return false;
+
+
+    const selected =
+        countIngredients(
+            selectedIngredients
+        );
+
+
+    const required =
+        currentOrder.ingredients;
+
+
+    const requiredKeys =
+        Object.keys(required);
+
+    const selectedKeys =
+        Object.keys(selected);
+
+
+    if (
+        requiredKeys.length !==
+        selectedKeys.length
+    )
+        return false;
+
+
+    return requiredKeys.every(
+        id =>
+            selected[id] ===
+            required[id]
+    );
 
 }
 
@@ -2382,51 +2927,22 @@ function selectIngredient(key) {
 
 function checkOrderReady() {
 
-    const correct =
-        currentOrder
-            .ingredients
-            .every(
-                id =>
-                    selectedIngredients
-                        .includes(id)
-            );
+    if (
+        !currentOrder
+    )
+        return;
 
 
     if (
-        correct &&
-        selectedIngredients.length ===
-        currentOrder.ingredients.length
+        orderIsExact()
     ) {
 
-        const names =
-            currentOrder.ingredients
-                .map(
-                    id =>
-                        Object
-                            .values(
-                                ingredients
-                            )
-                            .find(
-                                i =>
-                                    i.id === id
-                            )
-                            .name
-                );
-
-
-        speakSequence([
-
-            "Todos os ingredientes necessários foram selecionados.",
-
-            names.join(", ") + ".",
-
-            "Pressione Enter para preparar."
-
-        ]);
-
+        speak(
+            "Todos os ingredientes e quantidades estão corretos. Pressione Enter para preparar."
+        );
 
         message(
-            "Todos os ingredientes corretos! ENTER para preparar."
+            "✅ PEDIDO COMPLETO! ENTER para preparar."
         );
 
     }
@@ -2470,9 +2986,6 @@ function removeLastIngredient() {
     ]++;
 
 
-    updateInventoryVisual();
-
-
     const item =
         Object
             .values(
@@ -2485,6 +2998,8 @@ function removeLastIngredient() {
 
 
     updateIngredientVisual();
+
+    updateInventoryDisplay();
 
 
     speak(
@@ -2500,7 +3015,7 @@ function removeLastIngredient() {
 
 
 /* =========================================================
-   VISUAL DOS INGREDIENTES SELECIONADOS
+   VISUAL
 ========================================================= */
 
 function updateIngredientVisual() {
@@ -2519,9 +3034,7 @@ function updateIngredientVisual() {
                     );
 
                 const key =
-                    element
-                        .dataset
-                        .key;
+                    element.dataset.key;
 
                 const item =
                     ingredients[key];
@@ -2561,25 +3074,16 @@ function prepareOrder() {
         return;
 
 
-    const exact =
-        selectedIngredients.length ===
-        currentOrder.ingredients.length
-        &&
-        currentOrder.ingredients.every(
-            id =>
-                selectedIngredients
-                    .includes(id)
-        );
-
-
-    if (!exact) {
+    if (
+        !orderIsExact()
+    ) {
 
         speak(
-            "O pedido está errado. Verifique os ingredientes."
+            "O pedido está errado. Verifique os ingredientes e as quantidades."
         );
 
         message(
-            "❌ Pedido incorreto."
+            "❌ Pedido incorreto. Verifique as quantidades."
         );
 
         return;
@@ -2596,18 +3100,18 @@ function prepareOrder() {
 
 
     speak(
-        "Preparando."
+        "Preparando o pedido."
     );
 
 
     setTimeout(() => {
 
         message(
-            `🍔 Hambúrguer pronto! ENTER para entregar para ${currentOrder.cliente}.`
+            `🍔 Pedido pronto! ENTER para entregar para ${currentOrder.cliente}.`
         );
 
         speak(
-            "Hambúrguer pronto. Pressione Enter para entregar."
+            "Pedido pronto. Pressione Enter para entregar."
         );
 
     }, 1100);
@@ -2643,6 +3147,9 @@ function deliverOrder() {
     updateTimer();
 
 
+    checkUnlocks();
+
+
     speakSequence([
 
         `Pedido entregue para ${currentOrder.cliente}.`,
@@ -2659,6 +3166,17 @@ function deliverOrder() {
     );
 
 
+    if (
+        score >= WIN_SCORE
+    ) {
+
+        winGame();
+
+        return;
+
+    }
+
+
     setTimeout(
         createOrder,
         1800
@@ -2669,31 +3187,35 @@ function deliverOrder() {
 
 /* =========================================================
    VERIFICAR ESTOQUE
-   IMPORTANTE:
-   SE QUALQUER INGREDIENTE CHEGAR A 0,
-   A CHUVA COMEÇA.
 ========================================================= */
 
 function checkInventory() {
 
-    if (rainActive)
+    if (
+        rainActive ||
+        !gameStarted
+    )
         return;
 
 
-    const values =
-        Object.values(
-            inventory
+    /*
+       IMPORTANTE:
+       Se QUALQUER ingrediente desbloqueado
+       chegar a zero, começa a chuva.
+    */
+
+    const emptyIngredient =
+        Object.entries(
+            ingredients
+        )
+        .find(
+            ([key, item]) =>
+                isUnlocked(key) &&
+                inventory[item.id] <= 0
         );
 
 
-    const empty =
-        values.some(
-            amount =>
-                amount <= 0
-        );
-
-
-    if (empty) {
+    if (emptyIngredient) {
 
         startIngredientRain();
 
@@ -2703,8 +3225,30 @@ function checkInventory() {
 
 
 /* =========================================================
-   COMEÇAR CHUVA
+   CHUVA
 ========================================================= */
+
+const rainOrder = [
+
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "0",
+    "-",
+    "+"
+
+];
+
+let rainIndex = 0;
+
+let collectedThisRain = 0;
+
 
 function startIngredientRain() {
 
@@ -2729,45 +3273,22 @@ function startIngredientRain() {
 
         "Os pedidos estão pausados.",
 
-        "O tempo também está pausado.",
+        "O tempo está pausado.",
 
-        "Prepare-se para a chuva de ingredientes."
+        "Vai começar a chuva de ingredientes.",
+
+        "Você receberá dez unidades de cada ingrediente."
 
     ]);
 
 
     setTimeout(
         beginRainSequence,
-        3200
+        4000
     );
 
 }
 
-
-/* =========================================================
-   CHUVA
-========================================================= */
-
-const rainOrder = [
-
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7"
-
-];
-
-let rainIndex = 0;
-
-let collectedThisRain = 0;
-
-
-/* =========================================================
-   PRÓXIMO INGREDIENTE
-========================================================= */
 
 function beginRainSequence() {
 
@@ -2780,7 +3301,16 @@ function beginRainSequence() {
 }
 
 
+/* =========================================================
+   PRÓXIMO INGREDIENTE DA CHUVA
+========================================================= */
+
 function nextFallingIngredient() {
+
+    /*
+       Depois de todos os ingredientes,
+       adicionamos +10 em TODOS.
+    */
 
     if (
         rainIndex >=
@@ -2802,6 +3332,23 @@ function nextFallingIngredient() {
 
     const item =
         ingredients[key];
+
+
+    /*
+       Ingredientes bloqueados não caem.
+    */
+
+    if (
+        !isUnlocked(key)
+    ) {
+
+        rainIndex++;
+
+        nextFallingIngredient();
+
+        return;
+
+    }
 
 
     const positionNames = [
@@ -2829,8 +3376,8 @@ function nextFallingIngredient() {
         rainChefX + "%";
 
 
-    fallingIngredient
-        .className = "";
+    fallingIngredient.className =
+        "";
 
 
     fallingIngredient
@@ -2841,7 +3388,8 @@ function nextFallingIngredient() {
 
 
     fallingIngredient.style
-        .display = "block";
+        .display =
+        "block";
 
 
     fallingIngredient.style
@@ -2849,8 +3397,8 @@ function nextFallingIngredient() {
         position + "%";
 
 
-    fallingIngredient.style
-        .top = "100px";
+    fallingIngredient.style.top =
+        "100px";
 
 
     rainInfo.textContent =
@@ -2895,24 +3443,12 @@ function nextFallingIngredient() {
             top + "px";
 
 
-        const chefPosition =
-            rainChefX;
-
-
-        const ingredientPosition =
-            position;
-
-
         const horizontalDistance =
             Math.abs(
-                chefPosition -
-                ingredientPosition
+                rainChefX -
+                position
             );
 
-
-        /*
-           COLISÃO
-        */
 
         if (
             progress >= .83 &&
@@ -2927,10 +3463,6 @@ function nextFallingIngredient() {
 
         }
 
-
-        /*
-           CAIU NO CHÃO
-        */
 
         if (
             progress >= 1
@@ -2960,7 +3492,7 @@ function nextFallingIngredient() {
 
 
 /* =========================================================
-   COLETAR INGREDIENTE
+   PEGAR NA CHUVA
 ========================================================= */
 
 function collectRainIngredient(
@@ -2968,15 +3500,8 @@ function collectRainIngredient(
 ) {
 
     fallingIngredient.style
-        .display = "none";
-
-
-    inventory[
-        item.id
-    ]++;
-
-
-    updateInventoryVisual();
+        .display =
+        "none";
 
 
     collectedThisRain++;
@@ -2988,7 +3513,7 @@ function collectRainIngredient(
 
 
     rainInfo.textContent =
-        `✅ ${item.name} COLETADO!`;
+        `✅ ${item.name} coletado!`;
 
 
     rainIndex++;
@@ -2996,14 +3521,14 @@ function collectRainIngredient(
 
     setTimeout(
         nextFallingIngredient,
-        550
+        400
     );
 
 }
 
 
 /* =========================================================
-   INGREDIENTE PERDIDO
+   PERDER NA CHUVA
 ========================================================= */
 
 function loseRainIngredient(
@@ -3011,16 +3536,18 @@ function loseRainIngredient(
 ) {
 
     fallingIngredient.style
-        .display = "none";
+        .display =
+        "none";
 
 
     speak(
-        `${item.name} perdido.`
+        `${item.name} caiu no chão.`
     );
 
 
     rainInfo.textContent =
-        `❌ ${item.name} caiu no chão e foi perdido.`;
+        `❌ ${item.name} caiu no chão.`
+    ;
 
 
     rainIndex++;
@@ -3028,7 +3555,7 @@ function loseRainIngredient(
 
     setTimeout(
         nextFallingIngredient,
-        700
+        500
     );
 
 }
@@ -3041,20 +3568,51 @@ function loseRainIngredient(
 function finishRain() {
 
     fallingIngredient.style
-        .display = "none";
+        .display =
+        "none";
+
+
+    /*
+       AQUI ESTÁ A NOVA REGRA:
+
+       +10 para CADA ingrediente desbloqueado,
+       independentemente de quanto ainda existia.
+    */
+
+    Object.entries(
+        ingredients
+    )
+    .forEach(
+        ([key, item]) => {
+
+            if (
+                isUnlocked(key)
+            ) {
+
+                inventory[
+                    item.id
+                ] += RAIN_REWARD;
+
+            }
+
+        }
+    );
+
+
+    updateInventoryDisplay();
 
 
     rainInfo.textContent =
-        "🍳 COLETA ENCERRADA! VOLTANDO À COZINHA...";
+        "🌧️ CHUVA ENCERRADA! +10 DE CADA INGREDIENTE!";
 
 
     speakSequence([
 
         "Coleta encerrada.",
 
-        "Voltando à cozinha.",
+        "Você recebeu dez unidades de cada ingrediente.",
 
-        "O jogo continua."
+        "Voltando à cozinha."
 
     ]);
 
@@ -3068,26 +3626,14 @@ function finishRain() {
         rainActive = false;
 
 
-        updateInventoryVisual();
-
-
         message(
-            "🍳 De volta à cozinha! Continue o pedido."
+            "🍳 De volta à cozinha! +10 de cada ingrediente."
         );
 
 
         speak(
-            "De volta à cozinha. Continue o pedido."
+            "De volta à cozinha. O pedido continua."
         );
-
-
-        /*
-           Se ainda houver algum ingrediente
-           zerado depois da chuva, começa
-           outra chuva.
-        */
-
-        checkInventory();
 
     }, 1800);
 
@@ -3095,7 +3641,7 @@ function finishRain() {
 
 
 /* =========================================================
-   MOVIMENTO NORMAL
+   MOVIMENTO
 ========================================================= */
 
 function moveChef(direction) {
@@ -3111,20 +3657,14 @@ function moveChef(direction) {
 
     if (
         direction === "left"
-    ) {
-
+    )
         chefX -= 3;
-
-    }
 
 
     if (
         direction === "right"
-    ) {
-
+    )
         chefX += 3;
-
-    }
 
 
     chefX =
@@ -3143,13 +3683,7 @@ function moveChef(direction) {
 }
 
 
-/* =========================================================
-   MOVIMENTO NA CHUVA
-========================================================= */
-
-function moveRainChef(
-    direction
-) {
+function moveRainChef(direction) {
 
     if (!rainActive)
         return;
@@ -3157,20 +3691,14 @@ function moveRainChef(
 
     if (
         direction === "left"
-    ) {
-
+    )
         rainChefX -= 5;
-
-    }
 
 
     if (
         direction === "right"
-    ) {
-
+    )
         rainChefX += 5;
-
-    }
 
 
     rainChefX =
@@ -3204,7 +3732,6 @@ function openRatMenu() {
 
 
     ratMode = true;
-
 
     ratMenu.style.display =
         "block";
@@ -3284,18 +3811,11 @@ function ratChoice(key) {
             );
 
 
-    /*
-       ESPANTAR
-    */
-
     if (key === "1") {
 
         inventory[
             chosen
         ]--;
-
-
-        updateInventoryVisual();
 
 
         speak(
@@ -3310,6 +3830,8 @@ function ratChoice(key) {
 
         closeRatMenu();
 
+        updateInventoryDisplay();
+
         checkInventory();
 
         return;
@@ -3317,18 +3839,11 @@ function ratChoice(key) {
     }
 
 
-    /*
-       IGNORAR
-    */
-
     if (key === "2") {
 
         inventory[
             chosen
         ]--;
-
-
-        updateInventoryVisual();
 
 
         speak(
@@ -3343,16 +3858,14 @@ function ratChoice(key) {
 
         closeRatMenu();
 
+        updateInventoryDisplay();
+
         checkInventory();
 
         return;
 
     }
 
-
-    /*
-       GERENTE
-    */
 
     if (key === "3") {
 
@@ -3432,25 +3945,16 @@ function handleEnter() {
             return;
 
 
-        const exact =
-            selectedIngredients.length ===
-            currentOrder.ingredients.length
-            &&
-            currentOrder.ingredients.every(
-                id =>
-                    selectedIngredients
-                        .includes(id)
-            );
-
-
-        if (exact) {
+        if (
+            orderIsExact()
+        ) {
 
             prepareOrder();
 
         } else {
 
             speak(
-                "O pedido ainda não está completo."
+                "O pedido ainda não está correto."
             );
 
         }
@@ -3490,55 +3994,31 @@ document.addEventListener(
         }
 
 
-        /*
-           GAME OVER
-        */
-
-        if (
-            gameOverState
-        ) {
+        if (gameOverState) {
 
             if (
                 key === "Enter"
-            ) {
-
+            )
                 restartGame();
 
-            }
-
             return;
 
         }
 
 
-        /*
-           MENU INICIAL
-        */
-
-        if (
-            !gameStarted
-        ) {
+        if (!gameStarted) {
 
             if (
                 key === "Enter"
-            ) {
-
+            )
                 startGame();
-
-            }
 
             return;
 
         }
 
 
-        /*
-           CHUVA
-        */
-
-        if (
-            rainActive
-        ) {
+        if (rainActive) {
 
             if (
                 key === "ArrowLeft" ||
@@ -3569,31 +4049,18 @@ document.addEventListener(
         }
 
 
-        /*
-           RATO
-        */
-
-        if (
-            ratMode
-        ) {
+        if (ratMode) {
 
             if (
                 ["1","2","3"]
                     .includes(key)
-            ) {
-
+            )
                 ratChoice(key);
-
-            }
 
             return;
 
         }
 
-
-        /*
-           ENTER
-        */
 
         if (
             key === "Enter"
@@ -3606,10 +4073,6 @@ document.addEventListener(
         }
 
 
-        /*
-           E
-        */
-
         if (
             key.toLowerCase() === "e"
         ) {
@@ -3621,10 +4084,6 @@ document.addEventListener(
         }
 
 
-        /*
-           Q
-        */
-
         if (
             key.toLowerCase() === "q"
         ) {
@@ -3635,10 +4094,6 @@ document.addEventListener(
 
         }
 
-
-        /*
-           BACKSPACE
-        */
 
         if (
             key === "Backspace"
@@ -3652,12 +4107,32 @@ document.addEventListener(
 
 
         /*
-           INGREDIENTES
+           NOVOS BOTÕES
+
+           8 = ketchup
+           9 = mostarda
+           0 = molho verde
+           - = bacon
+           + = ovo
+
+           No teclado, + pode aparecer como
+           "+" ou "=" dependendo da tecla.
         */
 
         if (
-            ["1","2","3","4","5","6","7"]
-                .includes(key)
+            [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "0",
+                "-"
+            ].includes(key)
         ) {
 
             selectIngredient(key);
@@ -3667,9 +4142,17 @@ document.addEventListener(
         }
 
 
-        /*
-           MOVIMENTO
-        */
+        if (
+            key === "+" ||
+            key === "="
+        ) {
+
+            selectIngredient("+");
+
+            return;
+
+        }
+
 
         if (
             key === "ArrowLeft" ||
@@ -3708,46 +4191,117 @@ function startGame() {
 
     gameOverState = false;
 
+    victoryState = false;
+
 
     startScreen.style.display =
         "none";
 
 
-    /*
-       Música
-    */
-
     startItalianMusic();
 
-
-    /*
-       Tutorial falado
-    */
 
     speakSequence([
 
         "Bem-vindo ao Cozinheiro Maluco.",
 
-        "Você tem três minutos.",
+        "Você começa com dez unidades de cada ingrediente.",
 
-        "Atenção: você começa com 10 unidades de cada ingrediente.",
+        "Se qualquer ingrediente acabar, começa a chuva e você recebe mais dez de cada.",
 
-        "Pão é 1. Carne é 2. Queijo é 3.",
+        "Os ingredientes novos são desbloqueados conforme você ganha pontos.",
 
-        "Tomate é 4. Alface é 5. Molho é 6. Cebola é 7.",
+        "Aos quatro mil pontos, você se torna o melhor chefe de Ubiratã.",
 
-        "Quando qualquer ingrediente acabar, começará a chuva de ingredientes.",
-
-        "Memorizou bem?",
-
-        "Bom jogo!"
+        "Vamos começar!"
 
     ]);
 
 
     createOrder();
 
+    updateInventoryDisplay();
+
     startTimer();
+
+}
+
+
+/* =========================================================
+   VITÓRIA
+========================================================= */
+
+function winGame() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    gameOverState = true;
+
+    victoryState = true;
+
+    gameStarted = false;
+
+
+    stopItalianMusic();
+
+
+    gameOverTitle.textContent =
+        "🏆 MELHOR CHEFE DE UBIRATÃ!";
+
+
+    gameOverTitle.classList.add(
+        "victoryTitle"
+    );
+
+
+    gameOverText.innerHTML = `
+
+        🎉 PARABÉNS! 🎉
+
+        <br><br>
+
+        Você alcançou
+        <strong>4000 pontos</strong>!
+
+        <br><br>
+
+        Você terminou o jogo como:
+
+        <br>
+
+        👨‍🍳
+        <strong>
+            O MELHOR CHEFE DE UBIRATÃ!
+        </strong>
+
+        <br><br>
+
+        Pontuação final:
+        <strong>
+            ${score}
+        </strong>
+
+    `;
+
+
+    gameOver.style.display =
+        "flex";
+
+
+    speakSequence([
+
+        "Parabéns!",
+
+        "Você chegou aos quatro mil pontos.",
+
+        "Você terminou o jogo.",
+
+        "Agora você é oficialmente o melhor chefe de Ubiratã!"
+
+    ]);
 
 }
 
@@ -3769,6 +4323,10 @@ function loseGame() {
 
 
     stopItalianMusic();
+
+
+    gameOverTitle.textContent =
+        "💀 FALÊNCIA!";
 
 
     gameOverText.innerHTML = `
@@ -3830,6 +4388,10 @@ function restartGame() {
 
     orderIndex = 0;
 
+    specialClientIndex = 0;
+
+    normalClientsSinceSpecial = 0;
+
     currentOrder = null;
 
     selectedIngredients = [];
@@ -3842,37 +4404,13 @@ function restartGame() {
 
     gameOverState = false;
 
-    gameStarted = false;
+    victoryState = false;
 
-
-    /*
-       ESTOQUE VOLTA PARA 10
-    */
-
-    inventory = {
-
-        pao: 10,
-
-        carne: 10,
-
-        queijo: 10,
-
-        tomate: 10,
-
-        alface: 10,
-
-        molho: 10,
-
-        cebola: 10
-
-    };
+    inventory =
+        makeInitialInventory();
 
 
     rainMode.style.display =
-        "none";
-
-
-    ratMenu.style.display =
         "none";
 
 
@@ -3882,7 +4420,7 @@ function restartGame() {
 
     updateTimer();
 
-    updateInventoryVisual();
+    updateInventoryDisplay();
 
 
     startScreen.style.display =
@@ -3890,14 +4428,14 @@ function restartGame() {
 
 
     speak(
-        "Jogo reiniciado. Você começa com 10 unidades de cada ingrediente. Pressione Enter para começar."
+        "Jogo reiniciado. Pressione Enter para começar."
     );
 
 }
 
 
 /* =========================================================
-   MOUSE NO COMEÇAR
+   MOUSE
 ========================================================= */
 
 startButton.addEventListener(
@@ -3905,7 +4443,7 @@ startButton.addEventListener(
     () => {
 
         speak(
-            "Começar. Você possui 10 unidades de cada ingrediente. Quando qualquer ingrediente acabar, começa a chuva de ingredientes. Pressione Enter."
+            "Começar. Pressione Enter."
         );
 
     }
@@ -3917,7 +4455,7 @@ startButton.addEventListener(
     () => {
 
         speak(
-            "Começar. Você possui 10 unidades de cada ingrediente. Quando qualquer ingrediente acabar, começa a chuva de ingredientes. Pressione Enter."
+            "Começar. Pressione Enter."
         );
 
     }
@@ -3936,10 +4474,6 @@ restartButton.addEventListener(
 );
 
 
-/* =========================================================
-   MOUSE NOS INGREDIENTES
-========================================================= */
-
 document
     .querySelectorAll(
         ".ingredient"
@@ -3957,19 +4491,22 @@ document
                     const item =
                         ingredients[key];
 
-                    const amount =
-                        inventory[
-                            item.id
-                        ];
 
+                    if (
+                        !isUnlocked(key)
+                    ) {
 
-                    speak(
-                        `${item.name}. Tecla ${key}. ${amount} ${
-                            amount === 1
-                                ? "unidade"
-                                : "unidades"
-                        } disponíveis.`
-                    );
+                        speak(
+                            `${item.name}. Desbloqueia com ${item.unlock} pontos.`
+                        );
+
+                    } else {
+
+                        speak(
+                            `${item.name}. ${inventory[item.id]} unidades. Tecla ${key}.`
+                        );
+
+                    }
 
                 }
             );
@@ -3979,7 +4516,7 @@ document
 
 
 /* =========================================================
-   MÚSICA ITALIANA
+   MÚSICA
 ========================================================= */
 
 let audioContext = null;
@@ -4269,7 +4806,7 @@ function stopItalianMusic() {
 
 updateTimer();
 
-updateInventoryVisual();
+updateInventoryDisplay();
 
 message(
     "Passe o mouse sobre COMEÇAR — ENTER para ouvir."
