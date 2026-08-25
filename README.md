@@ -27,12 +27,8 @@ body {
     background: #0d1422;
     color: white;
     font-family: "Courier New", monospace;
-
-    /* IMPORTANTE:
-       agora a página pode rolar pelo mouse */
     overflow-x: hidden;
     overflow-y: auto;
-
     image-rendering: pixelated;
 }
 
@@ -508,11 +504,9 @@ kbd {
         );
 
     border:
-
         4px solid #a76334;
 
     box-shadow:
-
         inset 0 0 0 3px #321c12;
 
     color: #fff;
@@ -623,7 +617,7 @@ kbd {
 
 .ingredient {
 
-    padding: 12px 7px;
+    padding: 10px 7px;
 
     background: #1c2a42;
 
@@ -632,6 +626,10 @@ kbd {
     text-align: center;
 
     font-weight: bold;
+
+    transition:
+        background .15s,
+        border-color .15s;
 }
 
 .ingredient.selected {
@@ -641,11 +639,46 @@ kbd {
     border-color: #72e092;
 }
 
+.ingredient.low-stock {
+
+    border-color: #d59a3a;
+}
+
+.ingredient.empty {
+
+    background: #5a2525;
+
+    border-color: #ff5757;
+}
+
 .key {
 
     color: #ffd83d;
 
     font-size: 20px;
+}
+
+.stock {
+
+    display: block;
+
+    margin-top: 6px;
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.ingredient.low-stock .stock {
+
+    color: #ffb347;
+}
+
+.ingredient.empty .stock {
+
+    color: #ff5757;
 }
 
 
@@ -856,9 +889,6 @@ kbd {
     z-index: 10;
 }
 
-
-/* chão da chuva */
-
 #rainGround {
 
     position: absolute;
@@ -879,9 +909,6 @@ kbd {
     border-top:
         8px solid #b86b38;
 }
-
-
-/* posições */
 
 .rainTarget {
 
@@ -905,9 +932,6 @@ kbd {
     left: 80%;
 }
 
-
-/* ingrediente caindo */
-
 #fallingIngredient {
 
     position: absolute;
@@ -927,7 +951,9 @@ kbd {
 }
 
 
-/* tipos */
+/* =========================================================
+   TIPOS DE INGREDIENTES DA CHUVA
+========================================================= */
 
 .pixel-pao {
     background: #e6a044;
@@ -963,7 +989,9 @@ kbd {
 }
 
 
-/* chef da chuva */
+/* =========================================================
+   CHEF DA CHUVA
+========================================================= */
 
 #rainChef {
 
@@ -1025,7 +1053,7 @@ kbd {
 
 
 /* =========================================================
-   FIM DE JOGO
+   GAME OVER
 ========================================================= */
 
 #gameOver {
@@ -1084,7 +1112,7 @@ kbd {
     #ingredientsList {
 
         grid-template-columns:
-            repeat(4, 1fr);
+            repeat(2, 1fr);
     }
 
     .controls {
@@ -1217,7 +1245,7 @@ kbd {
     </div>
 
 
-    <!-- MENSAGEM AGORA NO BALCÃO -->
+    <!-- MENSAGEM -->
 
     <div id="messageBoard">
         Aguardando...
@@ -1257,50 +1285,112 @@ kbd {
             <div
                 class="ingredient"
                 data-key="1">
+
                 <span class="key">1</span>
                 Pão
+
+                <small
+                    class="stock"
+                    id="stock-pao">
+                    10 unidades
+                </small>
+
             </div>
+
 
             <div
                 class="ingredient"
                 data-key="2">
+
                 <span class="key">2</span>
                 Carne
+
+                <small
+                    class="stock"
+                    id="stock-carne">
+                    10 unidades
+                </small>
+
             </div>
+
 
             <div
                 class="ingredient"
                 data-key="3">
+
                 <span class="key">3</span>
                 Queijo
+
+                <small
+                    class="stock"
+                    id="stock-queijo">
+                    10 unidades
+                </small>
+
             </div>
+
 
             <div
                 class="ingredient"
                 data-key="4">
+
                 <span class="key">4</span>
                 Tomate
+
+                <small
+                    class="stock"
+                    id="stock-tomate">
+                    10 unidades
+                </small>
+
             </div>
+
 
             <div
                 class="ingredient"
                 data-key="5">
+
                 <span class="key">5</span>
                 Alface
+
+                <small
+                    class="stock"
+                    id="stock-alface">
+                    10 unidades
+                </small>
+
             </div>
+
 
             <div
                 class="ingredient"
                 data-key="6">
+
                 <span class="key">6</span>
                 Molho
+
+                <small
+                    class="stock"
+                    id="stock-molho">
+                    10 unidades
+                </small>
+
             </div>
+
 
             <div
                 class="ingredient"
                 data-key="7">
+
                 <span class="key">7</span>
                 Cebola
+
+                <small
+                    class="stock"
+                    id="stock-cebola">
+                    10 unidades
+                </small>
+
             </div>
 
         </div>
@@ -1338,6 +1428,15 @@ kbd {
             Prepare os pedidos,
             sobreviva ao caos
             e mantenha seu restaurante vivo!
+        </p>
+
+        <p style="color:#ffd83d; font-weight:bold;">
+            🧺 ESTOQUE INICIAL
+        </p>
+
+        <p>
+            Você começa com
+            <strong>10 unidades de cada ingrediente!</strong>
         </p>
 
 
@@ -1610,24 +1709,25 @@ let orderIndex = 0;
 
 
 /* =========================================================
-   ESTOQUE INTERNO
+   ESTOQUE
+   AGORA SÃO 10 UNIDADES DE CADA
 ========================================================= */
 
 let inventory = {
 
-    pao: 2,
+    pao: 10,
 
-    carne: 2,
+    carne: 10,
 
-    queijo: 2,
+    queijo: 10,
 
-    tomate: 2,
+    tomate: 10,
 
-    alface: 2,
+    alface: 10,
 
-    molho: 2,
+    molho: 10,
 
-    cebola: 2
+    cebola: 10
 
 };
 
@@ -1819,8 +1919,6 @@ function speak(text) {
             ? voice.lang
             : "pt-BR";
 
-    /* fala rápida */
-
     utter.rate = 1.55;
 
     utter.pitch = 1;
@@ -1904,6 +2002,73 @@ function message(text) {
 
     messageBoard.textContent =
         text;
+
+}
+
+
+/* =========================================================
+   ATUALIZAR ESTOQUE NA TELA
+========================================================= */
+
+function updateInventoryVisual() {
+
+    Object.keys(inventory).forEach(id => {
+
+        const stockElement =
+            document.getElementById(
+                `stock-${id}`
+            );
+
+        if (!stockElement)
+            return;
+
+
+        const amount =
+            inventory[id];
+
+
+        stockElement.textContent =
+            `${amount} ${
+                amount === 1
+                    ? "unidade"
+                    : "unidades"
+            }`;
+
+
+        const key =
+            Object.keys(ingredients)
+                .find(
+                    k =>
+                        ingredients[k].id === id
+                );
+
+
+        if (!key)
+            return;
+
+
+        const ingredientElement =
+            document.querySelector(
+                `.ingredient[data-key="${key}"]`
+            );
+
+
+        if (!ingredientElement)
+            return;
+
+
+        ingredientElement.classList.toggle(
+            "low-stock",
+            amount > 0 && amount <= 3
+        );
+
+
+        ingredientElement.classList.toggle(
+            "empty",
+            amount <= 0
+        );
+
+    });
 
 }
 
@@ -2139,11 +2304,11 @@ function selectIngredient(key) {
     ) {
 
         speak(
-            `${ingredient.name} acabou.`
+            `${ingredient.name} acabou. A chuva de ingredientes já vai começar.`
         );
 
         message(
-            `❌ ${ingredient.name} acabou.`
+            `❌ ${ingredient.name} acabou! 🌧️`
         );
 
 
@@ -2158,6 +2323,9 @@ function selectIngredient(key) {
     inventory[
         ingredient.id
     ]--;
+
+
+    updateInventoryVisual();
 
 
     selectedIngredients
@@ -2192,6 +2360,8 @@ function selectIngredient(key) {
         speak(
             `${ingredient.name}. Atenção: o pedido não contém ${ingredient.name.toLowerCase()}. Pressione Backspace para remover.`
         );
+
+        checkInventory();
 
         return;
 
@@ -2300,6 +2470,9 @@ function removeLastIngredient() {
     ]++;
 
 
+    updateInventoryVisual();
+
+
     const item =
         Object
             .values(
@@ -2327,7 +2500,7 @@ function removeLastIngredient() {
 
 
 /* =========================================================
-   VISUAL DOS INGREDIENTES
+   VISUAL DOS INGREDIENTES SELECIONADOS
 ========================================================= */
 
 function updateIngredientVisual() {
@@ -2496,6 +2669,9 @@ function deliverOrder() {
 
 /* =========================================================
    VERIFICAR ESTOQUE
+   IMPORTANTE:
+   SE QUALQUER INGREDIENTE CHEGAR A 0,
+   A CHUVA COMEÇA.
 ========================================================= */
 
 function checkInventory() {
@@ -2511,7 +2687,7 @@ function checkInventory() {
 
 
     const empty =
-        values.every(
+        values.some(
             amount =>
                 amount <= 0
         );
@@ -2539,11 +2715,6 @@ function startIngredientRain() {
     rainActive = true;
 
 
-    /*
-       pedidos e timer ficam pausados
-    */
-
-
     rainMode.style.display =
         "block";
 
@@ -2554,7 +2725,7 @@ function startIngredientRain() {
 
     speakSequence([
 
-        "Atenção! O estoque acabou.",
+        "Atenção! Um ingrediente acabou.",
 
         "Os pedidos estão pausados.",
 
@@ -2594,18 +2765,9 @@ let rainIndex = 0;
 let collectedThisRain = 0;
 
 
-/* posições */
-
-const rainPositions = {
-
-    left: 20,
-
-    center: 50,
-
-    right: 80
-
-};
-
+/* =========================================================
+   PRÓXIMO INGREDIENTE
+========================================================= */
 
 function beginRainSequence() {
 
@@ -2617,10 +2779,6 @@ function beginRainSequence() {
 
 }
 
-
-/* =========================================================
-   PRÓXIMO INGREDIENTE
-========================================================= */
 
 function nextFallingIngredient() {
 
@@ -2704,10 +2862,6 @@ function nextFallingIngredient() {
     );
 
 
-    /*
-       tempo de queda
-    */
-
     const duration =
         2400;
 
@@ -2730,10 +2884,6 @@ function nextFallingIngredient() {
             );
 
 
-        /*
-           aceleração da queda
-        */
-
         const top =
             100 +
             progress * 420;
@@ -2745,18 +2895,9 @@ function nextFallingIngredient() {
             top + "px";
 
 
-        /*
-           posição atual do chef
-        */
-
         const chefPosition =
             rainChefX;
 
-
-        /*
-           ingrediente chega na altura
-           da cabeça
-        */
 
         const ingredientPosition =
             position;
@@ -2788,7 +2929,7 @@ function nextFallingIngredient() {
 
 
         /*
-           caiu no chão
+           CAIU NO CHÃO
         */
 
         if (
@@ -2833,6 +2974,9 @@ function collectRainIngredient(
     inventory[
         item.id
     ]++;
+
+
+    updateInventoryVisual();
 
 
     collectedThisRain++;
@@ -2924,11 +3068,8 @@ function finishRain() {
         rainActive = false;
 
 
-        /*
-           importante:
-           o pedido e o tempo continuam
-           de onde estavam.
-        */
+        updateInventoryVisual();
+
 
         message(
             "🍳 De volta à cozinha! Continue o pedido."
@@ -2939,6 +3080,14 @@ function finishRain() {
             "De volta à cozinha. Continue o pedido."
         );
 
+
+        /*
+           Se ainda houver algum ingrediente
+           zerado depois da chuva, começa
+           outra chuva.
+        */
+
+        checkInventory();
 
     }, 1800);
 
@@ -3146,6 +3295,9 @@ function ratChoice(key) {
         ]--;
 
 
+        updateInventoryVisual();
+
+
         speak(
             `Você espantou o rato. Ele derrubou ${item.name}.`
         );
@@ -3174,6 +3326,9 @@ function ratChoice(key) {
         inventory[
             chosen
         ]--;
+
+
+        updateInventoryVisual();
 
 
         speak(
@@ -3559,14 +3714,14 @@ function startGame() {
 
 
     /*
-       música
+       Música
     */
 
     startItalianMusic();
 
 
     /*
-       tutorial
+       Tutorial falado
     */
 
     speakSequence([
@@ -3575,13 +3730,17 @@ function startGame() {
 
         "Você tem três minutos.",
 
+        "Atenção: você começa com 10 unidades de cada ingrediente.",
+
         "Pão é 1. Carne é 2. Queijo é 3.",
 
         "Tomate é 4. Alface é 5. Molho é 6. Cebola é 7.",
 
+        "Quando qualquer ingrediente acabar, começará a chuva de ingredientes.",
+
         "Memorizou bem?",
 
-        "Se quiser repetir, pressione Backspace."
+        "Bom jogo!"
 
     ]);
 
@@ -3686,26 +3845,34 @@ function restartGame() {
     gameStarted = false;
 
 
+    /*
+       ESTOQUE VOLTA PARA 10
+    */
+
     inventory = {
 
-        pao: 2,
+        pao: 10,
 
-        carne: 2,
+        carne: 10,
 
-        queijo: 2,
+        queijo: 10,
 
-        tomate: 2,
+        tomate: 10,
 
-        alface: 2,
+        alface: 10,
 
-        molho: 2,
+        molho: 10,
 
-        cebola: 2
+        cebola: 10
 
     };
 
 
     rainMode.style.display =
+        "none";
+
+
+    ratMenu.style.display =
         "none";
 
 
@@ -3715,13 +3882,15 @@ function restartGame() {
 
     updateTimer();
 
+    updateInventoryVisual();
+
 
     startScreen.style.display =
         "flex";
 
 
     speak(
-        "Jogo reiniciado. Pressione Enter para começar."
+        "Jogo reiniciado. Você começa com 10 unidades de cada ingrediente. Pressione Enter para começar."
     );
 
 }
@@ -3736,7 +3905,7 @@ startButton.addEventListener(
     () => {
 
         speak(
-            "Começar. Pressione Enter."
+            "Começar. Você possui 10 unidades de cada ingrediente. Quando qualquer ingrediente acabar, começa a chuva de ingredientes. Pressione Enter."
         );
 
     }
@@ -3748,7 +3917,7 @@ startButton.addEventListener(
     () => {
 
         speak(
-            "Começar. Pressione Enter."
+            "Começar. Você possui 10 unidades de cada ingrediente. Quando qualquer ingrediente acabar, começa a chuva de ingredientes. Pressione Enter."
         );
 
     }
@@ -3788,9 +3957,18 @@ document
                     const item =
                         ingredients[key];
 
+                    const amount =
+                        inventory[
+                            item.id
+                        ];
+
 
                     speak(
-                        `${item.name}. Tecla ${key}.`
+                        `${item.name}. Tecla ${key}. ${amount} ${
+                            amount === 1
+                                ? "unidade"
+                                : "unidades"
+                        } disponíveis.`
                     );
 
                 }
@@ -4090,6 +4268,8 @@ function stopItalianMusic() {
 ========================================================= */
 
 updateTimer();
+
+updateInventoryVisual();
 
 message(
     "Passe o mouse sobre COMEÇAR — ENTER para ouvir."
