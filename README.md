@@ -1089,7 +1089,7 @@ kbd {
         </div>
 
         <div class="stat">
-            ⏱️ <span id="timer">03:00</span>
+            ⏱️ <span id="timer">05:00</span>
         </div>
 
         <div class="stat">
@@ -1413,7 +1413,7 @@ kbd {
    CONFIGURAÇÕES
 ========================================================= */
 
-const START_TIME = 180;
+const START_TIME = 300;
 
 const ORDER_POINTS = 150;
 
@@ -2466,8 +2466,12 @@ function getNextOrder() {
     */
     if (pendingUnlockedIngredients.length) {
 
-        const pendingId = pendingUnlockedIngredients[0];
+        const pendingKey = pendingUnlockedIngredients[0];
+        const pendingItem = ingredients[pendingKey];
+        const pendingId = pendingItem.id;
 
+        // O PRÓXIMO cliente é obrigado a pedir o ingrediente novo.
+        // Se houver um cliente especial compatível, ele pode ser usado.
         if (wantsSpecial) {
             const matchingSpecial = specialOrders.find(order =>
                 order.ingredients[pendingId] > 0 &&
@@ -2486,18 +2490,13 @@ function getNextOrder() {
             }
         }
 
-        // Cliente normal: somente 1 unidade do ingrediente novo.
-        const item = ingredients[pendingId];
         const normalUnlockOrder = {
-            cliente: `Cliente ${item.name}`,
-            prato: `Hambúrguer com ${item.name}`,
+            cliente: `Cliente ${pendingItem.name}`,
+            prato: `Hambúrguer com ${pendingItem.name}`,
             ingredients: {
                 pao: 1,
                 carne: 1,
-                [pendingId === "8" ? "cheddar" :
-                 pendingId === "9" ? "frango" :
-                 pendingId === "0" ? "catupiry" :
-                 pendingId === "-" ? "bacon" : "verde"]: 1
+                [pendingId]: 1
             }
         };
 
@@ -3068,19 +3067,12 @@ function deliverOrder() {
     checkUnlocks();
 
 
-    speakSequence([
-
-        `Pedido entregue para ${currentOrder.cliente}.`,
-
-        "Você ganhou 150 pontos.",
-
-        "Mais 7 segundos."
-
-    ]);
-
+    speak(
+        "Perfeito! 150 pontos!"
+    );
 
     message(
-        "🎉 PEDIDO PERFEITO! +150 PONTOS | +15 SEGUNDOS"
+        "🎉 PERFEITO! 150 PONTOS!"
     );
 
 
@@ -3999,7 +3991,7 @@ function winGame() {
 
         "Parabéns!",
 
-        "Você chegou aos quatro mil pontos.",
+        "Você chegou aos cinco mil pontos.",
 
         "Você terminou o jogo.",
 
@@ -4144,17 +4136,121 @@ function restartGame() {
 
 
 /* =========================================================
-   MOUSE
+   MOUSE — LEITURA AUTOMÁTICA DO BOTÃO COMEÇAR
 ========================================================= */
 
+let startButtonMouseReading = false;
+let startButtonLastSpeech = 0;
+
+function speakStartButton(force = false) {
+
+    if (gameStarted)
+        return;
+
+    const now = Date.now();
+
+    // Evita repetir a frase dezenas de vezes enquanto o mouse se move.
+    if (!force && now - startButtonLastSpeech < 1200)
+        return;
+
+    startButtonLastSpeech = now;
+    startButtonMouseReading = true;
+
+    if (!synth)
+        return;
+
+    synth.cancel();
+
+    const utter = new SpeechSynthesisUtterance(
+        "Começar. Pressione Enter para iniciar o jogo."
+    );
+
+    const voice = getPortugueseVoice();
+
+    if (voice)
+        utter.voice = voice;
+
+    utter.lang = voice ? voice.lang : "pt-BR";
+    utter.rate = 1.35;
+    utter.pitch = 1;
+    utter.volume = 1;
+
+    // Se o navegador ainda não tiver carregado as vozes, tenta novamente.
+    utter.onerror = () => {
+        setTimeout(() => {
+            if (!gameStarted)
+                speakStartButton(true);
+        }, 250);
+    };
+
+    synth.speak(utter);
+}
+
+function resetStartButtonMouseReading() {
+    startButtonMouseReading = false;
+}
+
+// Usamos vários eventos porque alguns navegadores/iframes não disparam
+// mouseenter de forma confiável no preview.
 startButton.addEventListener(
     "mouseenter",
-    () => {
+    () => speakStartButton(true)
+);
 
-        speak(
-            "Começar. Pressione Enter."
+startButton.addEventListener(
+    "mouseover",
+    () => speakStartButton()
+);
+
+startButton.addEventListener(
+    "pointerenter",
+    () => speakStartButton(true)
+);
+
+startButton.addEventListener(
+    "pointermove",
+    () => speakStartButton()
+);
+
+startButton.addEventListener(
+    "mousemove",
+    () => speakStartButton()
+);
+
+startButton.addEventListener(
+    "mouseleave",
+    resetStartButtonMouseReading
+);
+
+startButton.addEventListener(
+    "pointerleave",
+    resetStartButtonMouseReading
+);
+
+// Fallback: detecta o elemento sob o cursor mesmo quando o evento
+// do próprio botão não chega ao elemento dentro do preview.
+document.addEventListener(
+    "pointermove",
+    event => {
+
+        if (gameStarted) {
+            resetStartButtonMouseReading();
+            return;
+        }
+
+        const element = document.elementFromPoint(
+            event.clientX,
+            event.clientY
         );
 
+        if (
+            element === startButton ||
+            startButton.contains(element)
+        ) {
+            speakStartButton();
+        } else {
+            resetStartButtonMouseReading();
+        }
     }
 );
 
@@ -4231,88 +4327,116 @@ document
 let audioContext = null;
 
 let musicTimer = null;
-
 let musicPlaying = false;
+
+let rainMusicTimer = null;
+let rainMusicPlaying = false;
+
+let gameMusicGain = null;
+let rainMusicGain = null;
 
 
 const melody = [
-
-    659.25,
-    783.99,
-    880.00,
-    783.99,
-
-    659.25,
-    587.33,
-    523.25,
-    587.33,
-
-    659.25,
-    783.99,
-    987.77,
-    880.00,
-
-    783.99,
-    659.25,
-    587.33,
-    523.25
-
+    659.25, 783.99, 880.00, 783.99,
+    659.25, 587.33, 523.25, 587.33,
+    659.25, 783.99, 987.77, 880.00,
+    783.99, 659.25, 587.33, 523.25
 ];
+
+
+const rainMelody = [
+    523.25, 659.25, 783.99, 659.25,
+    587.33, 698.46, 880.00, 698.46,
+    523.25, 659.25, 783.99, 987.77,
+    880.00, 783.99, 659.25, 523.25
+];
+
+
+function ensureAudio() {
+
+    if (!audioContext) {
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+    }
+
+    if (!gameMusicGain) {
+        gameMusicGain =
+            audioContext.createGain();
+
+        gameMusicGain.gain.value = 1;
+
+        gameMusicGain.connect(
+            audioContext.destination
+        );
+    }
+
+    if (!rainMusicGain) {
+        rainMusicGain =
+            audioContext.createGain();
+
+        rainMusicGain.gain.value = 0;
+
+        rainMusicGain.connect(
+            audioContext.destination
+        );
+    }
+
+    if (
+        audioContext.state ===
+        "suspended"
+    ) {
+        audioContext.resume();
+    }
+
+}
 
 
 function playNote(
     frequency,
     duration,
-    start
+    start,
+    destination
 ) {
 
     if (!audioContext)
         return;
 
-
     const oscillator =
-        audioContext
-            .createOscillator();
+        audioContext.createOscillator();
 
     const gain =
-        audioContext
-            .createGain();
-
+        audioContext.createGain();
 
     oscillator.type =
         "triangle";
 
-
     oscillator.frequency.value =
         frequency;
-
 
     gain.gain.setValueAtTime(
         .0001,
         start
     );
 
+    gain.gain.linearRampToValueAtTime(
+        .035,
+        start + .025
+    );
 
-    gain.gain
-        .linearRampToValueAtTime(
-            .035,
-            start + .025
-        );
-
-
-    gain.gain
-        .exponentialRampToValueAtTime(
-            .001,
-            start + duration
-        );
-
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        start + duration
+    );
 
     oscillator.connect(gain);
 
     gain.connect(
+        destination ||
         audioContext.destination
     );
-
 
     oscillator.start(start);
 
@@ -4325,56 +4449,46 @@ function playNote(
 
 function playBass(
     frequency,
-    start
+    start,
+    destination
 ) {
 
     if (!audioContext)
         return;
 
-
     const oscillator =
-        audioContext
-            .createOscillator();
+        audioContext.createOscillator();
 
     const gain =
-        audioContext
-            .createGain();
-
+        audioContext.createGain();
 
     oscillator.type =
         "sine";
 
-
     oscillator.frequency.value =
         frequency;
-
 
     gain.gain.setValueAtTime(
         .0001,
         start
     );
 
+    gain.gain.exponentialRampToValueAtTime(
+        .025,
+        start + .03
+    );
 
-    gain.gain
-        .exponentialRampToValueAtTime(
-            .025,
-            start + .03
-        );
-
-
-    gain.gain
-        .exponentialRampToValueAtTime(
-            .0001,
-            start + .35
-        );
-
+    gain.gain.exponentialRampToValueAtTime(
+        .0001,
+        start + .35
+    );
 
     oscillator.connect(gain);
 
     gain.connect(
+        destination ||
         audioContext.destination
     );
-
 
     oscillator.start(start);
 
@@ -4393,15 +4507,10 @@ function scheduleMusic() {
     )
         return;
 
-
     const start =
-        audioContext.currentTime
-        + .05;
+        audioContext.currentTime + .05;
 
-
-    const beat =
-        .28;
-
+    const beat = .28;
 
     melody.forEach(
         (note, index) => {
@@ -4409,23 +4518,19 @@ function scheduleMusic() {
             playNote(
                 note,
                 .22,
-                start +
-                index * beat
+                start + index * beat,
+                gameMusicGain
             );
 
         }
     );
 
-
     const bass = [
-
         130.81,
         164.81,
         146.83,
         174.61
-
     ];
-
 
     bass.forEach(
         (note, index) => {
@@ -4435,12 +4540,12 @@ function scheduleMusic() {
                 start +
                 index *
                 beat *
-                4
+                4,
+                gameMusicGain
             );
 
         }
     );
-
 
     musicTimer =
         setTimeout(
@@ -4453,57 +4558,123 @@ function scheduleMusic() {
 }
 
 
-const rainMelody = [
-    523.25, 659.25, 783.99, 659.25,
-    587.33, 698.46, 880.00, 698.46,
-    523.25, 659.25, 783.99, 987.77,
-    880.00, 783.99, 659.25, 523.25
-];
-
-let rainMusicPlaying = false;
-let rainMusicTimer = null;
-
 function scheduleRainMusic() {
-    if (!rainMusicPlaying || !audioContext) return;
 
-    const start = audioContext.currentTime + 0.05;
-    const beat = 0.22;
+    if (
+        !rainMusicPlaying ||
+        !audioContext
+    )
+        return;
 
-    rainMelody.forEach((note, index) => {
-        playNote(note, 0.17, start + index * beat);
-    });
+    const start =
+        audioContext.currentTime + .05;
 
-    [174.61, 196.00, 220.00, 246.94].forEach((note, index) => {
-        playBass(note, start + index * beat * 4);
-    });
+    const beat = .22;
 
-    rainMusicTimer = setTimeout(
-        scheduleRainMusic,
-        rainMelody.length * beat * 1000
+    rainMelody.forEach(
+        (note, index) => {
+
+            playNote(
+                note,
+                .17,
+                start + index * beat,
+                rainMusicGain
+            );
+
+        }
     );
+
+    [
+        174.61,
+        196.00,
+        220.00,
+        246.94
+    ].forEach(
+        (note, index) => {
+
+            playBass(
+                note,
+                start +
+                index *
+                beat *
+                4,
+                rainMusicGain
+            );
+
+        }
+    );
+
+    rainMusicTimer =
+        setTimeout(
+            scheduleRainMusic,
+            rainMelody.length *
+            beat *
+            1000
+        );
+
 }
+
 
 function startRainMusic() {
-    try {
-        if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
 
-        if (audioContext.state === "suspended") {
-            audioContext.resume();
-        }
+    try {
+
+        ensureAudio();
+
+        // A música normal fica completamente muda.
+        gameMusicGain.gain.setTargetAtTime(
+            0,
+            audioContext.currentTime,
+            .01
+        );
+
+        rainMusicGain.gain.setTargetAtTime(
+            1,
+            audioContext.currentTime,
+            .01
+        );
 
         rainMusicPlaying = true;
-        clearTimeout(rainMusicTimer);
+
+        clearTimeout(
+            rainMusicTimer
+        );
+
         scheduleRainMusic();
-    } catch (error) {
-        console.log("Música da chuva indisponível.");
+
     }
+    catch (error) {
+
+        console.log(
+            "Música da chuva indisponível."
+        );
+
+    }
+
 }
 
+
 function stopRainMusic() {
+
     rainMusicPlaying = false;
-    clearTimeout(rainMusicTimer);
+
+    clearTimeout(
+        rainMusicTimer
+    );
+
+    if (
+        audioContext &&
+        rainMusicGain
+    ) {
+
+        rainMusicGain.gain.setTargetAtTime(
+            0,
+            audioContext.currentTime,
+            .01
+        );
+
+    }
+
 }
 
 
@@ -4511,26 +4682,20 @@ function startItalianMusic() {
 
     try {
 
-        if (!audioContext) {
+        ensureAudio();
 
-            audioContext =
-                new (
-                    window.AudioContext ||
-                    window.webkitAudioContext
-                )();
+        // A música da chuva fica completamente muda.
+        rainMusicGain.gain.setTargetAtTime(
+            0,
+            audioContext.currentTime,
+            .01
+        );
 
-        }
-
-
-        if (
-            audioContext.state ===
-            "suspended"
-        ) {
-
-            audioContext.resume();
-
-        }
-
+        gameMusicGain.gain.setTargetAtTime(
+            1,
+            audioContext.currentTime,
+            .01
+        );
 
         musicPlaying = true;
 
@@ -4560,6 +4725,19 @@ function stopItalianMusic() {
         musicTimer
     );
 
+    if (
+        audioContext &&
+        gameMusicGain
+    ) {
+
+        gameMusicGain.gain.setTargetAtTime(
+            0,
+            audioContext.currentTime,
+            .01
+        );
+
+    }
+
 }
 
 
@@ -4572,7 +4750,7 @@ updateTimer();
 updateInventoryDisplay();
 
 message(
-    "Passe o mouse sobre COMEÇAR — ENTER para ouvir."
+    "Passe o mouse sobre COMEÇAR para ouvir. Pressione Enter para iniciar."
 );
 
 </script>
